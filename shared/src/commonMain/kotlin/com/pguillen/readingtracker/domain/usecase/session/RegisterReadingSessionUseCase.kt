@@ -57,7 +57,7 @@ class RegisterReadingSessionUseCase(
 		}
 
 		val updatedBook = book.copy(
-			currentPage = params.endPage,
+			currentPage = maxOf(book.currentPage, params.endPage),
 			status = newStatus,
 			startedAt = book.startedAt ?: today,
 			finishedAt = if (newStatus == ReadingStatus.FINISHED) today else book.finishedAt,
