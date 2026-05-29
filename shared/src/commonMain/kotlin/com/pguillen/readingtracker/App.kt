@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.pguillen.readingtracker.di.appModule
+import com.pguillen.readingtracker.presentation.library.LibraryRoute
 import org.koin.compose.KoinApplication
 import org.koin.dsl.koinConfiguration
 
@@ -14,7 +15,7 @@ fun App() {
 		modules(appModule)
 	}) {
 		MaterialTheme {
-
+			LibraryRoute()
 		}
 	}
 
