@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.Book
 import com.pguillen.readingtracker.domain.model.ReadingStatus
+import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
