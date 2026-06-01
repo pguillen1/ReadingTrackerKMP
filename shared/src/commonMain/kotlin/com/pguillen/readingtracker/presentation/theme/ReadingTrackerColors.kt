@@ -1,4 +1,4 @@
-package com.pguillen.readingtracker.presentation.library
+package com.pguillen.readingtracker.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
