@@ -8,10 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.pguillen.readingtracker.presentation.bookedit.AddEditBookRoute
 import com.pguillen.readingtracker.presentation.library.LibraryRoute
 import com.pguillen.readingtracker.presentation.settings.SettingsRoute
 import com.pguillen.readingtracker.presentation.stats.StatsRoute
@@ -50,7 +52,7 @@ fun AppNavigation() {
 			composable(AppRoute.Library.route) {
 				LibraryRoute(
 					onBookClick = {},
-					onAddBookClick = {}
+					onAddBookClick = { navController.navigate(AppRoute.AddBook.route) }
 				)
 			}
 
@@ -60,6 +62,12 @@ fun AppNavigation() {
 
 			composable(AppRoute.Settings.route) {
 				SettingsRoute()
+			}
+
+			composable(AppRoute.AddBook.route) {
+				AddEditBookRoute(
+					onNavigateBack = { navController.popBackStack() }
+				)
 			}
 		}
 	}
@@ -75,7 +83,7 @@ private fun NavDestination?.shouldShowBottomBar(): Boolean {
 	}
 }
 
-private fun androidx.navigation.NavHostController.navigateToTopLevelDestination(
+private fun NavHostController.navigateToTopLevelDestination(
 	route: String
 ) {
 	navigate(route) {
