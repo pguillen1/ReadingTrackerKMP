@@ -53,6 +53,7 @@ kotlin {
 			implementation(libs.koin.compose.viewmodel)
 			implementation(libs.koin.core.viewmodel)
 			implementation(libs.compose.material.icons.extended)
+			implementation(libs.androidx.navigation.compose)
 		}
 		commonTest.dependencies {
 			implementation(libs.kotlin.test)
