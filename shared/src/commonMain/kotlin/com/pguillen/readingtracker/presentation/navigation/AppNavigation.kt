@@ -1,0 +1,89 @@
+package com.pguillen.readingtracker.presentation.navigation
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.pguillen.readingtracker.presentation.library.LibraryRoute
+import com.pguillen.readingtracker.presentation.settings.SettingsRoute
+import com.pguillen.readingtracker.presentation.stats.StatsRoute
+import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
+
+@Composable
+fun AppNavigation() {
+	val navController = rememberNavController()
+
+	val navBackStackEntry by navController.currentBackStackEntryAsState()
+	val currentDestination = navBackStackEntry?.destination
+	val currentRoute = currentDestination?.route
+
+	val shouldShowBottomBar = currentDestination.shouldShowBottomBar()
+
+	Scaffold(
+		containerColor = ReadingTrackerColors.background,
+		bottomBar = {
+			if (shouldShowBottomBar) {
+				ReadingTrackerBottomBar(
+					currentRoute = currentRoute,
+					onDestinationClick = { route ->
+						navController.navigateToTopLevelDestination(route)
+					}
+				)
+			}
+		}
+	) { innerPadding ->
+		NavHost(
+			navController = navController,
+			startDestination = AppRoute.Library.route,
+			modifier = Modifier
+				.background(ReadingTrackerColors.background)
+				.padding(innerPadding)
+		) {
+			composable(AppRoute.Library.route) {
+				LibraryRoute(
+					onBookClick = {},
+					onAddBookClick = {}
+				)
+			}
+
+			composable(AppRoute.Stats.route) {
+				StatsRoute()
+			}
+
+			composable(AppRoute.Settings.route) {
+				SettingsRoute()
+			}
+		}
+	}
+}
+
+private fun NavDestination?.shouldShowBottomBar(): Boolean {
+	if (this == null) return false
+
+	val topLevelRoutes = bottomNavDestinations.map { it.route }
+
+	return hierarchy.any { destination ->
+		destination.route in topLevelRoutes
+	}
+}
+
+private fun androidx.navigation.NavHostController.navigateToTopLevelDestination(
+	route: String
+) {
+	navigate(route) {
+		popUpTo(graph.startDestinationRoute ?: AppRoute.Library.route) {
+			saveState = true
+		}
+
+		launchSingleTop = true
+		restoreState = true
+	}
+}
