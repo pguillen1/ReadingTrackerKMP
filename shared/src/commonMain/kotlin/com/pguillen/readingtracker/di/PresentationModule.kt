@@ -3,6 +3,7 @@ package com.pguillen.readingtracker.di
 import com.pguillen.readingtracker.presentation.bookdetail.BookDetailViewModel
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookViewModel
 import com.pguillen.readingtracker.presentation.library.LibraryViewModel
+import com.pguillen.readingtracker.presentation.session.LogReadingSessionViewModel
 import com.pguillen.readingtracker.presentation.settings.SettingsViewModel
 import com.pguillen.readingtracker.presentation.stats.StatsViewModel
 import org.koin.core.module.dsl.viewModel
@@ -14,4 +15,5 @@ val presentationModule = module {
 	viewModel { SettingsViewModel(get(), get(), get(), get()) }
 	viewModel { AddEditBookViewModel(get()) }
 	viewModel { parameters -> BookDetailViewModel(parameters.get(), get()) }
+	viewModel { parameters -> LogReadingSessionViewModel(parameters.get(), get(), get(), get()) }
 }

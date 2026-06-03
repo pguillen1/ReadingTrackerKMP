@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import com.pguillen.readingtracker.presentation.bookdetail.BookDetailRoute
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookRoute
 import com.pguillen.readingtracker.presentation.library.LibraryRoute
+import com.pguillen.readingtracker.presentation.session.LogReadingSessionRoute
 import com.pguillen.readingtracker.presentation.settings.SettingsRoute
 import com.pguillen.readingtracker.presentation.stats.StatsRoute
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
@@ -91,8 +92,23 @@ fun AppNavigation() {
 							navController.popBackStack()
 						},
 						onEditBookClick = {},
-						onLogSessionClick = {},
+						onLogSessionClick = { selectedBookId ->
+							navController.navigate(AppRoute.LogSession.createRoute(selectedBookId))
+						},
 						onAddNoteClick = {}
+					)
+				}
+			}
+
+			composable(AppRoute.LogSession.route) { backStackEntry ->
+				val bookId = backStackEntry.savedStateHandle.get<String>(NavArgs.BOOK_ID)
+
+				if (bookId != null) {
+					LogReadingSessionRoute(
+						bookId = bookId,
+						onNavigateBack = {
+							navController.popBackStack()
+						}
 					)
 				}
 			}
