@@ -21,6 +21,8 @@ import com.pguillen.readingtracker.presentation.booknotes.BookNotesRoute
 import com.pguillen.readingtracker.presentation.booksessions.BookSessionsRoute
 import com.pguillen.readingtracker.presentation.library.LibraryRoute
 import com.pguillen.readingtracker.presentation.logsession.LogReadingSessionRoute
+import com.pguillen.readingtracker.presentation.noteedit.AddEditNoteMode
+import com.pguillen.readingtracker.presentation.noteedit.AddEditNoteRoute
 import com.pguillen.readingtracker.presentation.settings.SettingsRoute
 import com.pguillen.readingtracker.presentation.stats.StatsRoute
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
@@ -97,7 +99,9 @@ fun AppNavigation() {
 						onLogSessionClick = { selectedBookId ->
 							navController.navigate(AppRoute.LogSession.createRoute(selectedBookId))
 						},
-						onAddNoteClick = {},
+						onAddNoteClick = { selectedBookId ->
+							navController.navigate(AppRoute.AddNote.createRoute(selectedBookId))
+						},
 						onSeeAllSessionsClick = { selectedBookId ->
 							navController.navigate(AppRoute.BookSessions.createRoute(selectedBookId))
 						},
@@ -145,8 +149,38 @@ fun AppNavigation() {
 						onNavigateBack = {
 							navController.popBackStack()
 						},
-						onAddNoteClick = {},
-						onEditNoteClick = {},
+						onAddNoteClick = { selectedBookId ->
+							navController.navigate(AppRoute.AddNote.createRoute(selectedBookId))
+						},
+						onEditNoteClick = { noteId ->
+							navController.navigate(AppRoute.EditNote.createRoute(noteId))
+						},
+					)
+				}
+			}
+
+			composable(AppRoute.AddNote.route) { backStackEntry ->
+				val bookId = backStackEntry.savedStateHandle.get<String>(NavArgs.BOOK_ID)
+
+				if (bookId != null) {
+					AddEditNoteRoute(
+						mode = AddEditNoteMode.Add(bookId = bookId),
+						onNavigateBack = {
+							navController.popBackStack()
+						}
+					)
+				}
+			}
+
+			composable(AppRoute.EditNote.route) { backStackEntry ->
+				val noteId = backStackEntry.savedStateHandle.get<String>(NavArgs.NOTE_ID)
+
+				if (noteId != null) {
+					AddEditNoteRoute(
+						mode = AddEditNoteMode.Edit(noteId = noteId),
+						onNavigateBack = {
+							navController.popBackStack()
+						}
 					)
 				}
 			}
