@@ -27,6 +27,18 @@ sealed class AppRoute(
 		}
 	}
 
+	data object BookSessions : AppRoute("bookSessions/{${NavArgs.BOOK_ID}}") {
+		fun createRoute(bookId: String): String {
+			return "bookSessions/$bookId"
+		}
+	}
+
+	data object EditSession : AppRoute("editSession/{${NavArgs.SESSION_ID}}") {
+		fun createRoute(sessionId: String): String {
+			return "editSession/$sessionId"
+		}
+	}
+
 	data object BookNotes : AppRoute("bookNotes/{bookId}") {
 		fun createRoute(bookId: String): String {
 			return "bookNotes/$bookId"
