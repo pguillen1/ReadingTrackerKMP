@@ -9,13 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.pguillen.readingtracker.presentation.bookdetail.BookDetailRoute
+import com.pguillen.readingtracker.presentation.bookedit.AddEditBookMode
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookRoute
 import com.pguillen.readingtracker.presentation.booknotes.BookNotesRoute
 import com.pguillen.readingtracker.presentation.booksessions.BookSessionsRoute
@@ -77,17 +76,12 @@ fun AppNavigation() {
 
 			composable(AppRoute.AddBook.route) {
 				AddEditBookRoute(
-					onNavigateBack = { navController.popBackStack() }
+					onNavigateBack = { navController.popBackStack() },
+					mode = AddEditBookMode.Add
 				)
 			}
 
-			composable(
-				route = AppRoute.BookDetail.route,
-				arguments = listOf(
-					navArgument(NavArgs.BOOK_ID) {
-						type = NavType.StringType
-					}
-				)) { backStackEntry ->
+			composable(AppRoute.BookDetail.route) { backStackEntry ->
 				val bookId = backStackEntry.savedStateHandle.get<String>(NavArgs.BOOK_ID)
 
 				if (bookId != null) {
@@ -96,7 +90,9 @@ fun AppNavigation() {
 						onNavigateBack = {
 							navController.popBackStack()
 						},
-						onEditBookClick = {},
+						onEditBookClick = { selectedBookId ->
+							navController.navigate(AppRoute.EditBook.createRoute(selectedBookId))
+						},
 						onLogSessionClick = { selectedBookId ->
 							navController.navigate(AppRoute.LogSession.createRoute(selectedBookId))
 						},
@@ -109,6 +105,19 @@ fun AppNavigation() {
 						onSeeAllNotesClick = { selectedBookId ->
 							navController.navigate(AppRoute.BookNotes.createRoute(selectedBookId))
 						}
+					)
+				}
+			}
+
+			composable(AppRoute.EditBook.route) { backStackEntry ->
+				val bookId = backStackEntry.savedStateHandle.get<String>(NavArgs.BOOK_ID)
+
+				if (bookId != null) {
+					AddEditBookRoute(
+						onNavigateBack = {
+							navController.popBackStack()
+						},
+						mode = AddEditBookMode.Edit(bookId),
 					)
 				}
 			}
