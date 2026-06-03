@@ -9,6 +9,7 @@ import com.pguillen.readingtracker.domain.usecase.book.ObserveBooksUseCase
 import com.pguillen.readingtracker.domain.usecase.book.UpdateBookUseCase
 import com.pguillen.readingtracker.domain.usecase.note.AddBookNoteUseCase
 import com.pguillen.readingtracker.domain.usecase.note.DeleteBookNoteUseCase
+import com.pguillen.readingtracker.domain.usecase.note.GetBookNoteByIdUseCase
 import com.pguillen.readingtracker.domain.usecase.note.ObserveBookNotesUseCase
 import com.pguillen.readingtracker.domain.usecase.note.UpdateBookNoteUseCase
 import com.pguillen.readingtracker.domain.usecase.session.DeleteReadingSessionUseCase
@@ -48,4 +49,6 @@ val domainModule = module {
 	factory { UpdateThemePreferenceUseCase(get()) }
 
 	factory { ObserveBookDetailUseCase(get(), get(), get()) }
+
+	factory { GetBookNoteByIdUseCase(get()) }
 }
