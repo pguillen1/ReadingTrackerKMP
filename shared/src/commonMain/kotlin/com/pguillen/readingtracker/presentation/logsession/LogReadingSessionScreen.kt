@@ -1,4 +1,4 @@
-package com.pguillen.readingtracker.presentation.session
+package com.pguillen.readingtracker.presentation.logsession
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
