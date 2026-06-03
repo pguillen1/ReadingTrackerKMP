@@ -1,4 +1,4 @@
-package com.pguillen.readingtracker.presentation.logsession
+package com.pguillen.readingtracker.presentation.sessionedit
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -43,11 +43,11 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun LogReadingSessionRoute(
-	bookId: String,
+fun AddEditReadingSessionRoute(
+	mode: AddEditReadingSessionMode,
 	onNavigateBack: () -> Unit,
-	viewModel: LogReadingSessionViewModel = koinViewModel {
-		parametersOf(bookId)
+	viewModel: AddEditReadingSessionViewModel = koinViewModel {
+		parametersOf(mode)
 	}
 ) {
 	val uiState by viewModel.uiState.collectAsState()
@@ -55,12 +55,12 @@ fun LogReadingSessionRoute(
 	LaunchedEffect(viewModel) {
 		viewModel.effects.collect { effect ->
 			when (effect) {
-				LogReadingSessionUiEffect.NavigateBack -> onNavigateBack()
+				AddEditReadingSessionUiEffect.NavigateBack -> onNavigateBack()
 			}
 		}
 	}
 
-	LogReadingSessionScreen(
+	AddEditReadingSessionScreen(
 		uiState = uiState,
 		onNavigateBack = onNavigateBack,
 		onStartPageChanged = viewModel::onStartPageChanged,
@@ -73,8 +73,8 @@ fun LogReadingSessionRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LogReadingSessionScreen(
-	uiState: LogReadingSessionUiState,
+fun AddEditReadingSessionScreen(
+	uiState: AddEditReadingSessionUiState,
 	onNavigateBack: () -> Unit,
 	onStartPageChanged: (String) -> Unit,
 	onEndPageChanged: (String) -> Unit,
@@ -89,11 +89,21 @@ fun LogReadingSessionScreen(
 		topBar = {
 			TopAppBar(
 				title = {
-					Text(
-						text = "Log session",
-						fontWeight = FontWeight.SemiBold,
-						color = ReadingTrackerColors.textPrimary
-					)
+					Column {
+						Text(
+							text = uiState.title,
+							fontWeight = FontWeight.SemiBold,
+							color = ReadingTrackerColors.textPrimary
+						)
+
+						if (uiState.bookTitle.isNotBlank()) {
+							Text(
+								text = uiState.bookTitle,
+								style = MaterialTheme.typography.bodySmall,
+								color = ReadingTrackerColors.textSecondary
+							)
+						}
+					}
 				},
 				navigationIcon = {
 					IconButton(onClick = onNavigateBack) {
@@ -120,22 +130,12 @@ fun LogReadingSessionScreen(
 		) {
 			Spacer(modifier = Modifier.height(4.dp))
 
-			if (uiState.bookTitle.isNotBlank()) {
+			if (uiState.totalPages != null) {
 				Text(
-					text = uiState.bookTitle,
-					style = MaterialTheme.typography.titleLarge,
-					fontWeight = FontWeight.Bold,
-					color = ReadingTrackerColors.textPrimary
+					text = "Total pages: ${uiState.totalPages}",
+					style = MaterialTheme.typography.bodyMedium,
+					color = ReadingTrackerColors.textSecondary
 				)
-
-				val totalPages = uiState.totalPages
-				if (totalPages != null) {
-					Text(
-						text = "Total pages: $totalPages",
-						style = MaterialTheme.typography.bodyMedium,
-						color = ReadingTrackerColors.textSecondary
-					)
-				}
 			}
 
 			SessionTextField(
@@ -215,7 +215,7 @@ fun LogReadingSessionScreen(
 				Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
 				Text(
-					text = if (uiState.isSaving) "Saving..." else "Save session",
+					text = uiState.saveButtonText,
 					fontWeight = FontWeight.SemiBold
 				)
 			}

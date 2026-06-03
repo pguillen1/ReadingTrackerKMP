@@ -20,9 +20,10 @@ import com.pguillen.readingtracker.presentation.bookedit.AddEditBookRoute
 import com.pguillen.readingtracker.presentation.booknotes.BookNotesRoute
 import com.pguillen.readingtracker.presentation.booksessions.BookSessionsRoute
 import com.pguillen.readingtracker.presentation.library.LibraryRoute
-import com.pguillen.readingtracker.presentation.logsession.LogReadingSessionRoute
 import com.pguillen.readingtracker.presentation.noteedit.AddEditNoteMode
 import com.pguillen.readingtracker.presentation.noteedit.AddEditNoteRoute
+import com.pguillen.readingtracker.presentation.sessionedit.AddEditReadingSessionMode
+import com.pguillen.readingtracker.presentation.sessionedit.AddEditReadingSessionRoute
 import com.pguillen.readingtracker.presentation.settings.SettingsRoute
 import com.pguillen.readingtracker.presentation.stats.StatsRoute
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
@@ -116,11 +117,11 @@ fun AppNavigation() {
 				val bookId = backStackEntry.savedStateHandle.get<String>(NavArgs.BOOK_ID)
 
 				if (bookId != null) {
-					LogReadingSessionRoute(
-						bookId = bookId,
+					AddEditReadingSessionRoute(
 						onNavigateBack = {
 							navController.popBackStack()
-						}
+						},
+						mode = AddEditReadingSessionMode.Add(bookId),
 					)
 				}
 			}
@@ -134,8 +135,25 @@ fun AppNavigation() {
 						onNavigateBack = {
 							navController.popBackStack()
 						},
-						onAddSessionClick = {},
-						onEditSessionClick = {}
+						onAddSessionClick = { selectedBookId ->
+							navController.navigate(AppRoute.LogSession.createRoute(selectedBookId))
+						},
+						onEditSessionClick = { sessionId ->
+							navController.navigate(AppRoute.EditSession.createRoute(sessionId))
+						}
+					)
+				}
+			}
+
+			composable(AppRoute.EditSession.route) { backStackEntry ->
+				val sessionId = backStackEntry.savedStateHandle.get<String>(NavArgs.SESSION_ID)
+
+				if (sessionId != null) {
+					AddEditReadingSessionRoute(
+						onNavigateBack = {
+							navController.popBackStack()
+						},
+						mode = AddEditReadingSessionMode.Edit(sessionId),
 					)
 				}
 			}
