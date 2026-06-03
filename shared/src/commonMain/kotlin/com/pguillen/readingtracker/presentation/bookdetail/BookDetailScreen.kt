@@ -35,6 +35,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -62,6 +63,8 @@ fun BookDetailRoute(
 	onEditBookClick: (String) -> Unit,
 	onLogSessionClick: (String) -> Unit,
 	onAddNoteClick: (String) -> Unit,
+	onSeeAllSessionsClick: (String) -> Unit,
+	onSeeAllNotesClick: (String) -> Unit,
 	viewModel: BookDetailViewModel = koinViewModel {
 		parametersOf(bookId)
 	}
@@ -73,7 +76,9 @@ fun BookDetailRoute(
 		onNavigateBack = onNavigateBack,
 		onEditBookClick = onEditBookClick,
 		onLogSessionClick = onLogSessionClick,
-		onAddNoteClick = onAddNoteClick
+		onAddNoteClick = onAddNoteClick,
+		onSeeAllSessionsClick = onSeeAllSessionsClick,
+		onSeeAllNotesClick = onSeeAllNotesClick
 	)
 }
 
@@ -84,7 +89,9 @@ fun BookDetailScreen(
 	onNavigateBack: () -> Unit,
 	onEditBookClick: (String) -> Unit,
 	onLogSessionClick: (String) -> Unit,
-	onAddNoteClick: (String) -> Unit
+	onAddNoteClick: (String) -> Unit,
+	onSeeAllSessionsClick: (String) -> Unit,
+	onSeeAllNotesClick: (String) -> Unit,
 ) {
 	Scaffold(
 		containerColor = ReadingTrackerColors.background,
@@ -166,7 +173,9 @@ fun BookDetailScreen(
 					recentNotes = uiState.recentNotes,
 					onLogSessionClick = onLogSessionClick,
 					onAddNoteClick = onAddNoteClick,
-					modifier = Modifier.padding(innerPadding)
+					modifier = Modifier.padding(innerPadding),
+					onSeeAllSessionsClick = onSeeAllSessionsClick,
+					onSeeAllNotesClick = onSeeAllNotesClick
 				)
 			}
 		}
@@ -180,7 +189,9 @@ private fun BookDetailContent(
 	recentNotes: List<BookNote>,
 	onLogSessionClick: (String) -> Unit,
 	onAddNoteClick: (String) -> Unit,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	onSeeAllSessionsClick: (String) -> Unit,
+	onSeeAllNotesClick: (String) -> Unit,
 ) {
 	LazyColumn(
 		modifier = modifier
@@ -208,13 +219,17 @@ private fun BookDetailContent(
 
 		item {
 			RecentSessionsCard(
-				sessions = recentSessions
+				bookId = book.id,
+				sessions = recentSessions,
+				onSeeAllClick = onSeeAllSessionsClick
 			)
 		}
 
 		item {
 			RecentNotesCard(
-				notes = recentNotes
+				bookId = book.id,
+				notes = recentNotes,
+				onSeeAllClick = onSeeAllNotesClick
 			)
 		}
 	}
@@ -392,7 +407,9 @@ private fun BookActionButtons(
 
 @Composable
 private fun RecentSessionsCard(
-	sessions: List<ReadingSession>
+	bookId: String,
+	sessions: List<ReadingSession>,
+	onSeeAllClick: (String) -> Unit
 ) {
 	Card(
 		modifier = Modifier.fillMaxWidth(),
@@ -405,11 +422,12 @@ private fun RecentSessionsCard(
 		Column(
 			modifier = Modifier.padding(16.dp)
 		) {
-			Text(
-				text = "Recent sessions",
-				style = MaterialTheme.typography.titleMedium,
-				fontWeight = FontWeight.SemiBold,
-				color = ReadingTrackerColors.textPrimary
+			SectionHeader(
+				title = "Recent sessions",
+				actionText = "See all",
+				onActionClick = {
+					onSeeAllClick(bookId)
+				}
 			)
 
 			Spacer(modifier = Modifier.height(12.dp))
@@ -471,7 +489,9 @@ private fun SessionRow(
 
 @Composable
 private fun RecentNotesCard(
-	notes: List<BookNote>
+	bookId: String,
+	notes: List<BookNote>,
+	onSeeAllClick: (String) -> Unit
 ) {
 	Card(
 		modifier = Modifier.fillMaxWidth(),
@@ -484,11 +504,12 @@ private fun RecentNotesCard(
 		Column(
 			modifier = Modifier.padding(16.dp)
 		) {
-			Text(
-				text = "Recent notes",
-				style = MaterialTheme.typography.titleMedium,
-				fontWeight = FontWeight.SemiBold,
-				color = ReadingTrackerColors.textPrimary
+			SectionHeader(
+				title = "Recent notes",
+				actionText = "See all",
+				onActionClick = {
+					onSeeAllClick(bookId)
+				}
 			)
 
 			Spacer(modifier = Modifier.height(12.dp))
@@ -507,6 +528,37 @@ private fun RecentNotesCard(
 					Spacer(modifier = Modifier.height(10.dp))
 				}
 			}
+		}
+	}
+}
+
+@Composable
+private fun SectionHeader(
+	title: String,
+	actionText: String,
+	onActionClick: () -> Unit
+) {
+	Row(
+		modifier = Modifier.fillMaxWidth(),
+		verticalAlignment = Alignment.CenterVertically
+	) {
+		Text(
+			text = title,
+			style = MaterialTheme.typography.titleMedium,
+			fontWeight = FontWeight.SemiBold,
+			color = ReadingTrackerColors.textPrimary,
+			modifier = Modifier.weight(1f)
+		)
+
+		TextButton(
+			onClick = onActionClick,
+			contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+		) {
+			Text(
+				text = actionText,
+				color = ReadingTrackerColors.primaryGreen,
+				fontWeight = FontWeight.SemiBold
+			)
 		}
 	}
 }
