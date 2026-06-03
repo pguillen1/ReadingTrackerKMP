@@ -9,10 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.pguillen.readingtracker.presentation.bookdetail.BookDetailRoute
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookRoute
 import com.pguillen.readingtracker.presentation.library.LibraryRoute
 import com.pguillen.readingtracker.presentation.settings.SettingsRoute
@@ -51,7 +54,9 @@ fun AppNavigation() {
 		) {
 			composable(AppRoute.Library.route) {
 				LibraryRoute(
-					onBookClick = {},
+					onBookClick = { bookId ->
+						navController.navigate(AppRoute.BookDetail.createRoute(bookId))
+					},
 					onAddBookClick = { navController.navigate(AppRoute.AddBook.route) }
 				)
 			}
@@ -68,6 +73,28 @@ fun AppNavigation() {
 				AddEditBookRoute(
 					onNavigateBack = { navController.popBackStack() }
 				)
+			}
+
+			composable(
+				route = AppRoute.BookDetail.route,
+				arguments = listOf(
+					navArgument(NavArgs.BOOK_ID) {
+						type = NavType.StringType
+					}
+				)) { backStackEntry ->
+				val bookId = backStackEntry.savedStateHandle.get<String>(NavArgs.BOOK_ID)
+
+				if (bookId != null) {
+					BookDetailRoute(
+						bookId = bookId,
+						onNavigateBack = {
+							navController.popBackStack()
+						},
+						onEditBookClick = {},
+						onLogSessionClick = {},
+						onAddNoteClick = {}
+					)
+				}
 			}
 		}
 	}

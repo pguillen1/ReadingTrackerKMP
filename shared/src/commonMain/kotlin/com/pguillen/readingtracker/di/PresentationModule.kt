@@ -1,5 +1,6 @@
 package com.pguillen.readingtracker.di
 
+import com.pguillen.readingtracker.presentation.bookdetail.BookDetailViewModel
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookViewModel
 import com.pguillen.readingtracker.presentation.library.LibraryViewModel
 import com.pguillen.readingtracker.presentation.settings.SettingsViewModel
@@ -12,4 +13,5 @@ val presentationModule = module {
 	viewModel { StatsViewModel(get()) }
 	viewModel { SettingsViewModel(get(), get(), get(), get()) }
 	viewModel { AddEditBookViewModel(get()) }
+	viewModel { parameters -> BookDetailViewModel(parameters.get(), get()) }
 }
