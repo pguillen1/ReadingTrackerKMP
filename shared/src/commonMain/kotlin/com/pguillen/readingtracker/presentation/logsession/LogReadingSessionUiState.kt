@@ -1,4 +1,4 @@
-package com.pguillen.readingtracker.presentation.session
+package com.pguillen.readingtracker.presentation.logsession
 
 data class LogReadingSessionUiState(
 	val bookTitle: String = "",
