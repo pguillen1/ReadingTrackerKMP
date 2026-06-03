@@ -4,6 +4,7 @@ import com.pguillen.readingtracker.domain.usecase.book.AddBookUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ChangeBookStatusUseCase
 import com.pguillen.readingtracker.domain.usecase.book.DeleteBookUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBookByIdUseCase
+import com.pguillen.readingtracker.domain.usecase.book.ObserveBookDetailUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBooksUseCase
 import com.pguillen.readingtracker.domain.usecase.book.UpdateBookUseCase
 import com.pguillen.readingtracker.domain.usecase.note.AddBookNoteUseCase
@@ -45,4 +46,6 @@ val domainModule = module {
 	factory { UpdateDefaultSortOptionUseCase(get()) }
 	factory { UpdateLibraryViewModeUseCase(get()) }
 	factory { UpdateThemePreferenceUseCase(get()) }
+
+	factory { ObserveBookDetailUseCase(get(), get(), get()) }
 }
