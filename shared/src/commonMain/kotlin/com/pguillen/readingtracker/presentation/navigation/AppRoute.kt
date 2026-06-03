@@ -39,7 +39,7 @@ sealed class AppRoute(
 		}
 	}
 
-	data object BookNotes : AppRoute("bookNotes/{bookId}") {
+	data object BookNotes : AppRoute("bookNotes/{${NavArgs.BOOK_ID}}") {
 		fun createRoute(bookId: String): String {
 			return "bookNotes/$bookId"
 		}
