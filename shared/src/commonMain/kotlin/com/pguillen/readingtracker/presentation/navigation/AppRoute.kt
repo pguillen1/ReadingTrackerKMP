@@ -44,4 +44,16 @@ sealed class AppRoute(
 			return "bookNotes/$bookId"
 		}
 	}
+
+	data object AddNote : AppRoute("addNote/{${NavArgs.BOOK_ID}}") {
+		fun createRoute(bookId: String): String {
+			return "addNote/$bookId"
+		}
+	}
+
+	data object EditNote : AppRoute("editNote/{${NavArgs.NOTE_ID}}") {
+		fun createRoute(noteId: String): String {
+			return "editNote/$noteId"
+		}
+	}
 }
