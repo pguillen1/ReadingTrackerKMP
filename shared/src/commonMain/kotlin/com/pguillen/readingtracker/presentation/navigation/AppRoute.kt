@@ -21,7 +21,7 @@ sealed class AppRoute(
 		}
 	}
 
-	data object LogSession : AppRoute("logSession/{bookId}") {
+	data object LogSession : AppRoute("logSession/{${NavArgs.BOOK_ID}}") {
 		fun createRoute(bookId: String): String {
 			return "logSession/$bookId"
 		}
