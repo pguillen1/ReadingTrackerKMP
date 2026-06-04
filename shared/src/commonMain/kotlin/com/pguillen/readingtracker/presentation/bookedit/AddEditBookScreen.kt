@@ -14,7 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -44,11 +44,15 @@ import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.ReadingStatus
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun AddEditBookRoute(
-	viewModel: AddEditBookViewModel = koinViewModel(),
-	onNavigateBack: () -> Unit
+	mode: AddEditBookMode,
+	onNavigateBack: () -> Unit,
+	viewModel: AddEditBookViewModel = koinViewModel {
+		parametersOf(mode)
+	}
 ) {
 	val uiState by viewModel.uiState.collectAsState()
 
@@ -92,7 +96,7 @@ fun AddEditBookScreen(
 			TopAppBar(
 				title = {
 					Text(
-						text = "Add book",
+						text = uiState.screenTitle,
 						fontWeight = FontWeight.SemiBold,
 						color = ReadingTrackerColors.textPrimary
 					)
@@ -100,7 +104,7 @@ fun AddEditBookScreen(
 				navigationIcon = {
 					IconButton(onClick = onNavigateBack) {
 						Icon(
-							imageVector = Icons.Outlined.ArrowBack,
+							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
 							tint = ReadingTrackerColors.textPrimary
 						)
@@ -202,7 +206,7 @@ fun AddEditBookScreen(
 				Spacer(modifier = Modifier.padding(horizontal = 4.dp))
 
 				Text(
-					text = if (uiState.isSaving) "Saving..." else "Save book",
+					text = uiState.saveButtonText,
 					fontWeight = FontWeight.SemiBold
 				)
 			}
