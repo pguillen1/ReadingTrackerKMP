@@ -1,7 +1,9 @@
 package com.pguillen.readingtracker.di
 
-val appModule = listOf(
+val commonAppModule = listOf(
 	dataModule,
 	domainModule,
 	presentationModule
 )
+
+fun appModules() = commonAppModule + platformModules()

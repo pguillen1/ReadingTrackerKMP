@@ -37,6 +37,9 @@ kotlin {
 	sourceSets {
 		androidMain.dependencies {
 			implementation(libs.compose.uiToolingPreview)
+			implementation(libs.koin.android)
+			implementation(libs.androidx.datastore.preferences.core)
+			implementation(libs.androidx.datastore.core)
 		}
 		commonMain.dependencies {
 			implementation(libs.compose.runtime)
