@@ -1,4 +1,4 @@
-package com.pguillen.readingtracker.data.fake
+package com.pguillen.readingtracker.data.repository
 
 import com.pguillen.readingtracker.domain.model.BookSortOption
 import com.pguillen.readingtracker.domain.model.LibraryViewMode
