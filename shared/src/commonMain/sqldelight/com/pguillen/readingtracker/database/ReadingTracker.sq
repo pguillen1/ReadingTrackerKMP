@@ -1,0 +1,162 @@
+CREATE TABLE book (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    total_pages INTEGER,
+    current_page INTEGER NOT NULL,
+    status TEXT NOT NULL,
+    started_at TEXT,
+    finished_at TEXT,
+    added_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+
+CREATE INDEX book_status_index ON book(status);
+CREATE INDEX book_updated_at_index ON book(updated_at);
+
+CREATE TABLE reading_session (
+    id TEXT NOT NULL PRIMARY KEY,
+    book_id TEXT NOT NULL,
+    date TEXT NOT NULL,
+    start_page INTEGER,
+    end_page INTEGER NOT NULL,
+    minutes INTEGER,
+    note TEXT,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY(book_id) REFERENCES book(id) ON DELETE CASCADE
+);
+
+CREATE INDEX reading_session_book_id_index ON reading_session(book_id);
+CREATE INDEX reading_session_date_index ON reading_session(date);
+
+CREATE TABLE book_note (
+    id TEXT NOT NULL PRIMARY KEY,
+    book_id TEXT NOT NULL,
+    type TEXT NOT NULL,
+    content TEXT NOT NULL,
+    page INTEGER,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY(book_id) REFERENCES book(id) ON DELETE CASCADE
+);
+
+CREATE INDEX book_note_book_id_index ON book_note(book_id);
+CREATE INDEX book_note_type_index ON book_note(type);
+
+selectAllBooks:
+SELECT *
+FROM book
+ORDER BY updated_at DESC;
+
+selectBookById:
+SELECT *
+FROM book
+WHERE id = ?;
+
+insertBook:
+INSERT INTO book(
+    id,
+    title,
+    author,
+    total_pages,
+    current_page,
+    status,
+    started_at,
+    finished_at,
+    added_at,
+    updated_at
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateBook:
+UPDATE book
+SET title = ?,
+    author = ?,
+    total_pages = ?,
+    current_page = ?,
+    status = ?,
+    started_at = ?,
+    finished_at = ?,
+    updated_at = ?
+WHERE id = ?;
+
+deleteBook:
+DELETE FROM book
+WHERE id = ?;
+
+selectAllSessions:
+SELECT *
+FROM reading_session
+ORDER BY date DESC, created_at DESC;
+
+selectSessionsByBookId:
+SELECT *
+FROM reading_session
+WHERE book_id = ?
+ORDER BY date DESC, created_at DESC;
+
+selectSessionById:
+SELECT *
+FROM reading_session
+WHERE id = ?;
+
+insertReadingSession:
+INSERT INTO reading_session(
+    id,
+    book_id,
+    date,
+    start_page,
+    end_page,
+    minutes,
+    note,
+    created_at
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+
+updateReadingSession:
+UPDATE reading_session
+SET date = ?,
+    start_page = ?,
+    end_page = ?,
+    minutes = ?,
+    note = ?
+WHERE id = ?;
+
+deleteReadingSession:
+DELETE FROM reading_session
+WHERE id = ?;
+
+selectNotesByBookId:
+SELECT *
+FROM book_note
+WHERE book_id = ?
+ORDER BY updated_at DESC;
+
+selectNoteById:
+SELECT *
+FROM book_note
+WHERE id = ?;
+
+insertBookNote:
+INSERT INTO book_note(
+    id,
+    book_id,
+    type,
+    content,
+    page,
+    created_at,
+    updated_at
+)
+VALUES (?, ?, ?, ?, ?, ?, ?);
+
+updateBookNote:
+UPDATE book_note
+SET type = ?,
+    content = ?,
+    page = ?,
+    updated_at = ?
+WHERE id = ?;
+
+deleteBookNote:
+DELETE FROM book_note
+WHERE id = ?;

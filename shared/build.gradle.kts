@@ -6,6 +6,7 @@ plugins {
 	alias(libs.plugins.androidMultiplatformLibrary)
 	alias(libs.plugins.composeMultiplatform)
 	alias(libs.plugins.composeCompiler)
+	alias(libs.plugins.sqldelight)
 }
 
 kotlin {
@@ -40,6 +41,8 @@ kotlin {
 			implementation(libs.koin.android)
 			implementation(libs.androidx.datastore.preferences.core)
 			implementation(libs.androidx.datastore.core)
+			implementation(libs.sqldelight.android.driver)
+			implementation(libs.sqldelight.coroutines.extensions)
 		}
 		commonMain.dependencies {
 			implementation(libs.compose.runtime)
@@ -69,4 +72,12 @@ kotlin {
 
 dependencies {
 	androidRuntimeClasspath(libs.compose.uiTooling)
+}
+
+sqldelight {
+	databases {
+		create("ReadingTrackerDatabase") {
+			packageName.set("com.pguillen.readingtracker.database")
+		}
+	}
 }
