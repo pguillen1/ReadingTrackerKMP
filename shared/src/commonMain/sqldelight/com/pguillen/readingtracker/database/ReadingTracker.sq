@@ -126,6 +126,10 @@ deleteReadingSession:
 DELETE FROM reading_session
 WHERE id = ?;
 
+deleteSessionsByBookId:
+DELETE FROM reading_session
+WHERE book_id = ?;
+
 selectNotesByBookId:
 SELECT *
 FROM book_note
@@ -160,3 +164,7 @@ WHERE id = ?;
 deleteBookNote:
 DELETE FROM book_note
 WHERE id = ?;
+
+deleteNotesByBookId:
+DELETE FROM book_note
+WHERE book_id = ?;
