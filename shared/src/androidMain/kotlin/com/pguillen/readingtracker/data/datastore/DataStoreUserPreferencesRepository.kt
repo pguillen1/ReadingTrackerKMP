@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.pguillen.readingtracker.domain.model.BookSortOption
-import com.pguillen.readingtracker.domain.model.LibraryViewMode
 import com.pguillen.readingtracker.domain.model.ThemePreference
 import com.pguillen.readingtracker.domain.model.UserPreferences
 import com.pguillen.readingtracker.domain.repository.UserPreferencesRepository
@@ -22,9 +21,6 @@ class DataStoreUserPreferencesRepository(
 				themePreference = preferences[Keys.THEME_PREFERENCE]
 					?.toThemePreference()
 					?: ThemePreference.SYSTEM,
-				libraryViewMode = preferences[Keys.LIBRARY_VIEW_MODE]
-					?.toLibraryViewMode()
-					?: LibraryViewMode.LIST,
 				defaultSortOption = preferences[Keys.DEFAULT_SORT_OPTION]
 					?.toBookSortOption()
 					?: BookSortOption.RECENTLY_UPDATED
@@ -38,12 +34,6 @@ class DataStoreUserPreferencesRepository(
 		}
 	}
 
-	override suspend fun updateLibraryViewMode(libraryViewMode: LibraryViewMode) {
-		dataStore.edit { preferences ->
-			preferences[Keys.LIBRARY_VIEW_MODE] = libraryViewMode.name
-		}
-	}
-
 	override suspend fun updateDefaultSortOption(sortOption: BookSortOption) {
 		dataStore.edit { preferences ->
 			preferences[Keys.DEFAULT_SORT_OPTION] = sortOption.name
@@ -52,17 +42,12 @@ class DataStoreUserPreferencesRepository(
 
 	private object Keys {
 		val THEME_PREFERENCE = stringPreferencesKey("theme_preference")
-		val LIBRARY_VIEW_MODE = stringPreferencesKey("library_view_mode")
 		val DEFAULT_SORT_OPTION = stringPreferencesKey("default_sort_option")
 	}
 }
 
 private fun String.toThemePreference(): ThemePreference {
 	return enumValueOrDefault(default = ThemePreference.SYSTEM)
-}
-
-private fun String.toLibraryViewMode(): LibraryViewMode {
-	return enumValueOrDefault(default = LibraryViewMode.LIST)
 }
 
 private fun String.toBookSortOption(): BookSortOption {

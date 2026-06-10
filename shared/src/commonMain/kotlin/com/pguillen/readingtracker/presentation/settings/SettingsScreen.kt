@@ -17,8 +17,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Sort
 import androidx.compose.material3.Card
@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.BookSortOption
-import com.pguillen.readingtracker.domain.model.LibraryViewMode
 import com.pguillen.readingtracker.domain.model.ThemePreference
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
@@ -53,7 +52,6 @@ fun SettingsRoute(
 	SettingsScreen(
 		uiState = uiState,
 		onThemePreferenceChanged = viewModel::onThemePreferenceChanged,
-		onLibraryViewModeChanged = viewModel::onLibraryViewModeChanged,
 		onDefaultSortOptionChanged = viewModel::onDefaultSortOptionChanged
 	)
 }
@@ -62,7 +60,6 @@ fun SettingsRoute(
 fun SettingsScreen(
 	uiState: SettingsUiState,
 	onThemePreferenceChanged: (ThemePreference) -> Unit,
-	onLibraryViewModeChanged: (LibraryViewMode) -> Unit,
 	onDefaultSortOptionChanged: (BookSortOption) -> Unit
 ) {
 	Scaffold(
@@ -109,24 +106,7 @@ fun SettingsScreen(
 			item {
 				SettingsCard {
 					SettingsOptionHeader(
-						icon = Icons.Outlined.GridView,
-						title = "Library view",
-						subtitle = "Choose how books are displayed"
-					)
-
-					Spacer(modifier = Modifier.height(14.dp))
-
-					LibraryViewModeSelector(
-						selected = uiState.libraryViewMode,
-						onSelected = onLibraryViewModeChanged
-					)
-				}
-			}
-
-			item {
-				SettingsCard {
-					SettingsOptionHeader(
-						icon = Icons.Outlined.Sort,
+						icon = Icons.AutoMirrored.Outlined.Sort,
 						title = "Default sort",
 						subtitle = "Choose default book sorting"
 					)
@@ -264,28 +244,6 @@ private fun ThemePreferenceSelector(
 			text = "Dark",
 			selected = selected == ThemePreference.DARK,
 			onClick = { onSelected(ThemePreference.DARK) }
-		)
-	}
-}
-
-@Composable
-private fun LibraryViewModeSelector(
-	selected: LibraryViewMode,
-	onSelected: (LibraryViewMode) -> Unit
-) {
-	Row(
-		horizontalArrangement = Arrangement.spacedBy(8.dp)
-	) {
-		SettingsChip(
-			text = "List",
-			selected = selected == LibraryViewMode.LIST,
-			onClick = { onSelected(LibraryViewMode.LIST) }
-		)
-
-		SettingsChip(
-			text = "Grid",
-			selected = selected == LibraryViewMode.GRID,
-			onClick = { onSelected(LibraryViewMode.GRID) }
 		)
 	}
 }
