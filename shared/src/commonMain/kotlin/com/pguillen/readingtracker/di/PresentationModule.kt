@@ -1,5 +1,6 @@
 package com.pguillen.readingtracker.di
 
+import com.pguillen.readingtracker.presentation.app.AppViewModel
 import com.pguillen.readingtracker.presentation.bookdetail.BookDetailViewModel
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookMode
 import com.pguillen.readingtracker.presentation.bookedit.AddEditBookViewModel
@@ -15,9 +16,9 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val presentationModule = module {
-	viewModel { LibraryViewModel(get()) }
+	viewModel { LibraryViewModel(get(), get()) }
 	viewModel { StatsViewModel(get()) }
-	viewModel { SettingsViewModel(get(), get(), get(), get()) }
+	viewModel { SettingsViewModel(get(), get(), get()) }
 	viewModel { parameters ->
 		AddEditBookViewModel(
 			parameters.get<AddEditBookMode>(),
@@ -48,4 +49,5 @@ val presentationModule = module {
 			get()
 		)
 	}
+	viewModel { AppViewModel(get()) }
 }

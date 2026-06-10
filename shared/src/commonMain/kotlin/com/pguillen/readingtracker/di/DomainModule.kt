@@ -19,7 +19,6 @@ import com.pguillen.readingtracker.domain.usecase.session.RegisterReadingSession
 import com.pguillen.readingtracker.domain.usecase.session.UpdateReadingSessionUseCase
 import com.pguillen.readingtracker.domain.usecase.settings.ObserveUserPreferencesUseCase
 import com.pguillen.readingtracker.domain.usecase.settings.UpdateDefaultSortOptionUseCase
-import com.pguillen.readingtracker.domain.usecase.settings.UpdateLibraryViewModeUseCase
 import com.pguillen.readingtracker.domain.usecase.settings.UpdateThemePreferenceUseCase
 import com.pguillen.readingtracker.domain.usecase.stats.GetReadingStatsUseCase
 import org.koin.dsl.module
@@ -46,7 +45,6 @@ val domainModule = module {
 
 	factory { ObserveUserPreferencesUseCase(get()) }
 	factory { UpdateDefaultSortOptionUseCase(get()) }
-	factory { UpdateLibraryViewModeUseCase(get()) }
 	factory { UpdateThemePreferenceUseCase(get()) }
 
 	factory { ObserveBookDetailUseCase(get(), get(), get()) }
