@@ -18,9 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.NoteAlt
 import androidx.compose.material.icons.outlined.Timer
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -39,6 +41,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -71,6 +74,14 @@ fun BookDetailRoute(
 ) {
 	val uiState by viewModel.uiState.collectAsState()
 
+	LaunchedEffect(viewModel) {
+		viewModel.effects.collect { effect ->
+			when (effect) {
+				BookDetailUiEffect.NavigateBack -> onNavigateBack()
+			}
+		}
+	}
+
 	BookDetailScreen(
 		uiState = uiState,
 		onNavigateBack = onNavigateBack,
@@ -78,7 +89,10 @@ fun BookDetailRoute(
 		onLogSessionClick = onLogSessionClick,
 		onAddNoteClick = onAddNoteClick,
 		onSeeAllSessionsClick = onSeeAllSessionsClick,
-		onSeeAllNotesClick = onSeeAllNotesClick
+		onSeeAllNotesClick = onSeeAllNotesClick,
+		onDeleteBookClick = viewModel::onDeleteBookClick,
+		onDismissDeleteDialog = viewModel::onDismissDeleteDialog,
+		onConfirmDeleteBook = viewModel::onConfirmDeleteBook
 	)
 }
 
@@ -92,6 +106,9 @@ fun BookDetailScreen(
 	onAddNoteClick: (String) -> Unit,
 	onSeeAllSessionsClick: (String) -> Unit,
 	onSeeAllNotesClick: (String) -> Unit,
+	onDeleteBookClick: () -> Unit,
+	onDismissDeleteDialog: () -> Unit,
+	onConfirmDeleteBook: () -> Unit
 ) {
 	Scaffold(
 		containerColor = ReadingTrackerColors.background,
@@ -125,6 +142,16 @@ fun BookDetailScreen(
 								imageVector = Icons.Outlined.Edit,
 								contentDescription = "Edit book",
 								tint = ReadingTrackerColors.textPrimary
+							)
+						}
+
+						IconButton(
+							onClick = onDeleteBookClick
+						) {
+							Icon(
+								imageVector = Icons.Outlined.Delete,
+								contentDescription = "Delete book",
+								tint = MaterialTheme.colorScheme.error
 							)
 						}
 					}
@@ -179,6 +206,16 @@ fun BookDetailScreen(
 				)
 			}
 		}
+	}
+
+	val book = uiState.book
+	if (uiState.showDeleteDialog && book != null) {
+		DeleteBookDialog(
+			bookTitle = book.title,
+			isDeleting = uiState.isDeleting,
+			onDismiss = onDismissDeleteDialog,
+			onConfirm = onConfirmDeleteBook
+		)
 	}
 }
 
@@ -638,6 +675,50 @@ private fun StatusBadge(
 			maxLines = 1
 		)
 	}
+}
+
+@Composable
+private fun DeleteBookDialog(
+	bookTitle: String,
+	isDeleting: Boolean,
+	onDismiss: () -> Unit,
+	onConfirm: () -> Unit
+) {
+	AlertDialog(
+		onDismissRequest = {
+			if (!isDeleting) {
+				onDismiss()
+			}
+		},
+		title = {
+			Text("Delete book?")
+		},
+		text = {
+			Text(
+				text = "This will permanently delete \"$bookTitle\", including its reading sessions and notes."
+			)
+		},
+		confirmButton = {
+			TextButton(
+				onClick = onConfirm,
+				enabled = !isDeleting
+			) {
+				Text(
+					text = if (isDeleting) "Deleting..." else "Delete",
+					color = MaterialTheme.colorScheme.error
+				)
+			}
+		},
+		dismissButton = {
+			TextButton(
+				onClick = onDismiss,
+				enabled = !isDeleting
+			) {
+				Text("Cancel")
+			}
+		},
+		containerColor = ReadingTrackerColors.card
+	)
 }
 
 private fun progressText(book: Book): String {
