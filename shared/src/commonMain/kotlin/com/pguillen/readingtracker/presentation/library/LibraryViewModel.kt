@@ -3,7 +3,9 @@ package com.pguillen.readingtracker.presentation.library
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pguillen.readingtracker.domain.model.Book
+import com.pguillen.readingtracker.domain.model.BookSortOption
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBooksUseCase
+import com.pguillen.readingtracker.domain.usecase.settings.ObserveUserPreferencesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -11,7 +13,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 class LibraryViewModel(
-	observeBooksUseCase: ObserveBooksUseCase
+	observeBooksUseCase: ObserveBooksUseCase,
+	observeUserPreferencesUseCase: ObserveUserPreferencesUseCase
 ) : ViewModel() {
 
 	private val searchQuery = MutableStateFlow("")
@@ -21,13 +24,14 @@ class LibraryViewModel(
 		combine(
 			observeBooksUseCase(),
 			searchQuery,
-			selectedFilter
-		) { books, query, filter ->
+			selectedFilter,
+			observeUserPreferencesUseCase()
+		) { books, query, filter, preferences ->
 			LibraryUiState(
 				books = books
 					.filterByStatus(filter)
 					.filterByQuery(query)
-					.sortedByDescending { it.updatedAt },
+					.sortByOption(preferences.defaultSortOption),
 				searchQuery = query,
 				selectedFilter = filter,
 				isLoading = false
@@ -45,7 +49,8 @@ class LibraryViewModel(
 	fun onFilterSelected(filter: LibraryFilter) {
 		selectedFilter.value = if (selectedFilter.value == filter) {
 			LibraryFilter.ALL
-		} else {
+		}
+		else {
 			filter
 		}
 	}
@@ -63,6 +68,18 @@ class LibraryViewModel(
 		return filter { book ->
 			book.title.lowercase().contains(normalizedQuery) ||
 					book.author.lowercase().contains(normalizedQuery)
+		}
+	}
+
+	private fun List<Book>.sortByOption(
+		sortOption: BookSortOption
+	): List<Book> {
+		return when (sortOption) {
+			BookSortOption.RECENTLY_UPDATED -> sortedByDescending { it.updatedAt }
+			BookSortOption.RECENTLY_ADDED -> sortedByDescending { it.addedAt }
+			BookSortOption.TITLE -> sortedBy { it.title.lowercase() }
+			BookSortOption.AUTHOR -> sortedBy { it.author.lowercase() }
+			BookSortOption.PROGRESS -> sortedByDescending { it.progressPercentage }
 		}
 	}
 }
