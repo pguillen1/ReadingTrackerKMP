@@ -27,7 +27,7 @@ val presentationModule = module {
 			get()
 		)
 	}
-	viewModel { parameters -> BookDetailViewModel(parameters.get(), get()) }
+	viewModel { parameters -> BookDetailViewModel(parameters.get(), get(), get()) }
 	viewModel { parameters ->
 		AddEditReadingSessionViewModel(
 			parameters.get(),
