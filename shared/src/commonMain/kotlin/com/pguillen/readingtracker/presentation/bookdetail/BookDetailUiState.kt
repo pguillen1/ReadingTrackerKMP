@@ -9,6 +9,8 @@ data class BookDetailUiState(
 	val recentSessions: List<ReadingSession> = emptyList(),
 	val recentNotes: List<BookNote> = emptyList(),
 	val isLoading: Boolean = true,
+	val isDeleting: Boolean = false,
+	val showDeleteDialog: Boolean = false,
 	val errorMessage: String? = null
 ) {
 	val hasBook: Boolean

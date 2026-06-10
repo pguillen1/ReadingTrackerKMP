@@ -70,7 +70,12 @@ class SqlDelightBookRepository(
 	}
 
 	override suspend fun deleteBook(bookId: String) {
-		queries.deleteBook(bookId)
+		queries.transaction {
+			queries.deleteBook(bookId)
+			queries.deleteNotesByBookId(bookId)
+			queries.deleteSessionsByBookId(bookId)
+		}
+
 	}
 
 	private fun mapBook(
