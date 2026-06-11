@@ -1,11 +1,16 @@
 package com.pguillen.readingtracker.presentation.navigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
@@ -39,6 +44,12 @@ fun AppNavigation() {
 
 	Scaffold(
 		containerColor = ReadingTrackerColors.background,
+		contentWindowInsets = WindowInsets(
+			left = 0.dp,
+			top = 0.dp,
+			right = 0.dp,
+			bottom = 0.dp
+		),
 		bottomBar = {
 			if (shouldShowBottomBar) {
 				ReadingTrackerBottomBar(
@@ -58,20 +69,26 @@ fun AppNavigation() {
 				.padding(innerPadding)
 		) {
 			composable(AppRoute.Library.route) {
-				LibraryRoute(
-					onBookClick = { bookId ->
-						navController.navigate(AppRoute.BookDetail.createRoute(bookId))
-					},
-					onAddBookClick = { navController.navigate(AppRoute.AddBook.route) }
-				)
+				TopLevelDestinationContent {
+					LibraryRoute(
+						onBookClick = { bookId ->
+							navController.navigate(AppRoute.BookDetail.createRoute(bookId))
+						},
+						onAddBookClick = { navController.navigate(AppRoute.AddBook.route) }
+					)
+				}
 			}
 
 			composable(AppRoute.Stats.route) {
-				StatsRoute()
+				TopLevelDestinationContent {
+					StatsRoute()
+				}
 			}
 
 			composable(AppRoute.Settings.route) {
-				SettingsRoute()
+				TopLevelDestinationContent {
+					SettingsRoute()
+				}
 			}
 
 			composable(AppRoute.AddBook.route) {
@@ -212,6 +229,19 @@ fun AppNavigation() {
 				}
 			}
 		}
+	}
+}
+
+@Composable
+private fun TopLevelDestinationContent(
+	content: @Composable () -> Unit
+) {
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.statusBarsPadding()
+	) {
+		content()
 	}
 }
 
