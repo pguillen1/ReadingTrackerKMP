@@ -37,8 +37,41 @@ android {
         }
     }
     buildTypes {
-        getByName("release") {
+        debug {
+            isDebuggable = true
             isMinifyEnabled = false
+            isShrinkResources = false
+        }
+
+        create("staging") {
+            initWith(getByName("release"))
+
+            applicationIdSuffix = ".staging"
+            versionNameSuffix = "-staging"
+
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            signingConfig = signingConfigs.getByName("debug")
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            matchingFallbacks += listOf("release")
+        }
+
+        release {
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
