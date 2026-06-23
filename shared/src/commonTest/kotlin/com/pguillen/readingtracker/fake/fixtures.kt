@@ -3,8 +3,12 @@ package com.pguillen.readingtracker.fake
 import kotlinx.datetime.LocalDate
 
 const val BOOK_TITLE = "The Hobbit"
+const val BOOK_TITLE_2 = "Dune"
+const val BOOK_TITLE_3 = "1984"
 const val BOOK_AUTHOR = "J. R. R. Tolkien"
 const val BOOK_ID = "book-1"
+const val BOOK_ID_2 = "book-2"
+const val BOOK_ID_3 = "book-3"
 const val BOOK_TOTAL_PAGES = 300
 const val BOOK_CURRENT_PAGE = 0
 const val BOOK_TITLE_WITH_SPACES = "   $BOOK_TITLE   "
