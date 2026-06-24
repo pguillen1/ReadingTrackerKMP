@@ -68,6 +68,11 @@ kotlin {
 		jsMain.dependencies {
 			implementation(libs.wrappers.browser)
 		}
+		getByName("androidHostTest") {
+			dependencies {
+				implementation(libs.sqldelight.sqlite.driver)
+			}
+		}
 	}
 }
 
