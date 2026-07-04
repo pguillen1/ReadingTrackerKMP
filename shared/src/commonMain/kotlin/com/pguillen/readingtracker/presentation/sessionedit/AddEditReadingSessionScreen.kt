@@ -34,10 +34,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.AddEditSession
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -91,6 +93,7 @@ fun AddEditReadingSessionScreen(
 				title = {
 					Column {
 						Text(
+							modifier = Modifier.testTag(AddEditSession.SCREEN_TITLE),
 							text = uiState.title,
 							fontWeight = FontWeight.SemiBold,
 							color = ReadingTrackerColors.textPrimary
@@ -106,7 +109,10 @@ fun AddEditReadingSessionScreen(
 					}
 				},
 				navigationIcon = {
-					IconButton(onClick = onNavigateBack) {
+					IconButton(
+						modifier = Modifier.testTag(AddEditSession.BACK_BUTTON),
+						onClick = onNavigateBack
+					) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -125,13 +131,15 @@ fun AddEditReadingSessionScreen(
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
 				.padding(innerPadding)
-				.padding(horizontal = 20.dp),
+				.padding(horizontal = 20.dp)
+				.testTag(AddEditSession.SCREEN),
 			verticalArrangement = Arrangement.spacedBy(18.dp)
 		) {
 			Spacer(modifier = Modifier.height(4.dp))
 
 			if (uiState.totalPages != null) {
 				Text(
+					modifier = Modifier.testTag(AddEditSession.TOTAL_PAGES_FIELD),
 					text = "Total pages: ${uiState.totalPages}",
 					style = MaterialTheme.typography.bodyMedium,
 					color = ReadingTrackerColors.textSecondary
@@ -139,6 +147,7 @@ fun AddEditReadingSessionScreen(
 			}
 
 			SessionTextField(
+				modifier = Modifier.testTag(AddEditSession.START_PAGE_FIELD),
 				value = uiState.startPage,
 				onValueChange = onStartPageChanged,
 				label = "Start page",
@@ -151,6 +160,7 @@ fun AddEditReadingSessionScreen(
 			)
 
 			SessionTextField(
+				modifier = Modifier.testTag(AddEditSession.END_PAGE_FIELD),
 				value = uiState.endPage,
 				onValueChange = onEndPageChanged,
 				label = "End page",
@@ -163,6 +173,7 @@ fun AddEditReadingSessionScreen(
 			)
 
 			SessionTextField(
+				modifier = Modifier.testTag(AddEditSession.MINUTES_FIELD),
 				value = uiState.minutes,
 				onValueChange = onMinutesChanged,
 				label = "Minutes",
@@ -175,6 +186,7 @@ fun AddEditReadingSessionScreen(
 			)
 
 			SessionTextField(
+				modifier = Modifier.testTag(AddEditSession.NOTE_FIELD),
 				value = uiState.note,
 				onValueChange = onNoteChanged,
 				label = "Note",
@@ -199,7 +211,7 @@ fun AddEditReadingSessionScreen(
 			Button(
 				onClick = onSaveClicked,
 				enabled = uiState.canSave,
-				modifier = Modifier.fillMaxWidth(),
+				modifier = Modifier.fillMaxWidth().testTag(AddEditSession.SAVE_BUTTON),
 				shape = RoundedCornerShape(18.dp),
 				colors = ButtonDefaults.buttonColors(
 					containerColor = ReadingTrackerColors.primaryGreen,
@@ -227,6 +239,7 @@ fun AddEditReadingSessionScreen(
 
 @Composable
 private fun SessionTextField(
+	modifier: Modifier,
 	value: String,
 	onValueChange: (String) -> Unit,
 	label: String,
@@ -238,7 +251,7 @@ private fun SessionTextField(
 	OutlinedTextField(
 		value = value,
 		onValueChange = onValueChange,
-		modifier = Modifier.fillMaxWidth(),
+		modifier = modifier.fillMaxWidth(),
 		label = {
 			Text(label)
 		},
