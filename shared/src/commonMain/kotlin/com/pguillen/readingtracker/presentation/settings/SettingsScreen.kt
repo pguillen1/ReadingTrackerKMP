@@ -20,7 +20,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Sort
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
@@ -36,10 +35,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.BookSortOption
 import com.pguillen.readingtracker.domain.model.ThemePreference
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.Settings
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -69,7 +70,8 @@ fun SettingsScreen(
 			modifier = Modifier
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
-				.padding(innerPadding),
+				.padding(innerPadding)
+				.testTag(Settings.SCREEN),
 			contentPadding = PaddingValues(
 				start = 20.dp,
 				end = 20.dp,
@@ -87,7 +89,9 @@ fun SettingsScreen(
 			}
 
 			item {
-				SettingsCard {
+				SettingsCard(
+					modifier = Modifier.testTag(Settings.THEME_CARD)
+				) {
 					SettingsOptionHeader(
 						icon = Icons.Outlined.DarkMode,
 						title = "Theme",
@@ -104,7 +108,9 @@ fun SettingsScreen(
 			}
 
 			item {
-				SettingsCard {
+				SettingsCard(
+					modifier = Modifier.testTag(Settings.DEFAULT_SORT_CARD)
+				) {
 					SettingsOptionHeader(
 						icon = Icons.AutoMirrored.Outlined.Sort,
 						title = "Default sort",
@@ -125,7 +131,9 @@ fun SettingsScreen(
 			}
 
 			item {
-				SettingsCard {
+				SettingsCard(
+					modifier = Modifier.testTag(Settings.ABOUT_CARD)
+				) {
 					SettingsOptionHeader(
 						icon = Icons.Outlined.Info,
 						title = "About Reading Tracker",
@@ -140,6 +148,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsHeader() {
 	Text(
+		modifier = Modifier.testTag(Settings.SCREEN_TITLE),
 		text = "Settings",
 		style = MaterialTheme.typography.headlineMedium,
 		fontWeight = FontWeight.Bold,
@@ -162,10 +171,11 @@ private fun SettingsSectionTitle(
 
 @Composable
 private fun SettingsCard(
+	modifier: Modifier,
 	content: @Composable ColumnScope.() -> Unit
 ) {
 	Card(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = modifier.fillMaxWidth(),
 		shape = RoundedCornerShape(24.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
@@ -229,18 +239,21 @@ private fun ThemePreferenceSelector(
 		horizontalArrangement = Arrangement.spacedBy(8.dp)
 	) {
 		SettingsChip(
+			modifier = Modifier.testTag(Settings.THEME_SYSTEM),
 			text = "System",
 			selected = selected == ThemePreference.SYSTEM,
 			onClick = { onSelected(ThemePreference.SYSTEM) }
 		)
 
 		SettingsChip(
+			modifier = Modifier.testTag(Settings.THEME_LIGHT),
 			text = "Light",
 			selected = selected == ThemePreference.LIGHT,
 			onClick = { onSelected(ThemePreference.LIGHT) }
 		)
 
 		SettingsChip(
+			modifier = Modifier.testTag(Settings.THEME_DARK),
 			text = "Dark",
 			selected = selected == ThemePreference.DARK,
 			onClick = { onSelected(ThemePreference.DARK) }
@@ -267,7 +280,15 @@ private fun SortOptionSelector(
 					BookSortOption.AUTHOR -> "Author"
 					BookSortOption.PROGRESS -> "Progress"
 				}
+				val tag = when (option) {
+					BookSortOption.RECENTLY_UPDATED -> Settings.SORT_BY_UPDATED
+					BookSortOption.RECENTLY_ADDED -> Settings.SORT_BY_ADDED
+					BookSortOption.TITLE -> Settings.SORT_BY_TITLE
+					BookSortOption.AUTHOR -> Settings.SORT_BY_AUTHOR
+					BookSortOption.PROGRESS -> Settings.SORT_BY_PROGRESS
+				}
 				SettingsChip(
+					modifier = Modifier.testTag(tag),
 					text = text,
 					selected = selected == option,
 					onClick = { onSelected(option) }
@@ -279,11 +300,13 @@ private fun SortOptionSelector(
 
 @Composable
 private fun SettingsChip(
+	modifier: Modifier,
 	text: String,
 	selected: Boolean,
 	onClick: () -> Unit
 ) {
 	FilterChip(
+		modifier = modifier,
 		selected = selected,
 		onClick = onClick,
 		label = {
