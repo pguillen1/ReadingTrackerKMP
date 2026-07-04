@@ -46,11 +46,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.BookNote
 import com.pguillen.readingtracker.domain.model.BookNoteType
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookNotes
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -98,6 +100,7 @@ fun BookNotesScreen(
 				title = {
 					Column {
 						Text(
+							modifier = Modifier.testTag(BookNotes.SCREEN_TITLE),
 							text = "Notes & quotes",
 							fontWeight = FontWeight.SemiBold,
 							color = ReadingTrackerColors.textPrimary
@@ -115,7 +118,10 @@ fun BookNotesScreen(
 					}
 				},
 				navigationIcon = {
-					IconButton(onClick = onNavigateBack) {
+					IconButton(
+						modifier = Modifier.testTag(BookNotes.BACK_BUTTON),
+						onClick = onNavigateBack
+					) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -130,6 +136,7 @@ fun BookNotesScreen(
 		},
 		floatingActionButton = {
 			FloatingActionButton(
+				modifier = Modifier.testTag(BookNotes.ADD_BUTTON),
 				onClick = onAddNoteClick,
 				containerColor = ReadingTrackerColors.primaryGreen,
 				contentColor = ReadingTrackerColors.onPrimary
@@ -146,13 +153,14 @@ fun BookNotesScreen(
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
 				.padding(innerPadding)
+				.testTag(BookNotes.SCREEN)
 		) {
 			when {
 				uiState.isLoading -> {
 					Text(
 						text = "Loading notes...",
 						color = ReadingTrackerColors.textSecondary,
-						modifier = Modifier.align(Alignment.Center)
+						modifier = Modifier.align(Alignment.Center).testTag(BookNotes.LOADING_TEXT)
 					)
 				}
 
@@ -210,6 +218,7 @@ private fun NotesContent(
 				modifier = Modifier
 					.fillMaxSize()
 					.padding(horizontal = 32.dp)
+					.testTag(BookNotes.EMPTY_SCREEN)
 			)
 		}
 		else {
@@ -234,18 +243,21 @@ private fun NoteFilterRow(
 		verticalArrangement = Arrangement.spacedBy(8.dp)
 	) {
 		NoteFilterChip(
+			modifier = Modifier.testTag(BookNotes.FILTER_ALL),
 			text = "All",
 			selected = selectedFilter == BookNoteFilter.ALL,
 			onClick = { onFilterSelected(BookNoteFilter.ALL) }
 		)
 
 		NoteFilterChip(
+			modifier = Modifier.testTag(BookNotes.FILTER_NOTES),
 			text = "Notes",
 			selected = selectedFilter == BookNoteFilter.NOTES,
 			onClick = { onFilterSelected(BookNoteFilter.NOTES) }
 		)
 
 		NoteFilterChip(
+			modifier = Modifier.testTag(BookNotes.FILTER_QUOTES),
 			text = "Quotes",
 			selected = selectedFilter == BookNoteFilter.QUOTES,
 			onClick = { onFilterSelected(BookNoteFilter.QUOTES) }
@@ -255,11 +267,13 @@ private fun NoteFilterRow(
 
 @Composable
 private fun NoteFilterChip(
+	modifier: Modifier,
 	text: String,
 	selected: Boolean,
 	onClick: () -> Unit
 ) {
 	FilterChip(
+		modifier = modifier,
 		selected = selected,
 		onClick = onClick,
 		label = {
@@ -282,7 +296,7 @@ private fun NotesList(
 	onDeleteNoteClick: (BookNote) -> Unit
 ) {
 	LazyColumn(
-		modifier = Modifier.fillMaxSize(),
+		modifier = Modifier.fillMaxSize().testTag(BookNotes.NOTES_LIST),
 		contentPadding = PaddingValues(
 			start = 20.dp,
 			end = 20.dp,
@@ -317,7 +331,8 @@ private fun NoteCard(
 	Card(
 		modifier = Modifier
 			.fillMaxWidth()
-			.clickable(onClick = onClick),
+			.clickable(onClick = onClick)
+			.testTag(BookNotes.noteCard(note.id)),
 		shape = RoundedCornerShape(24.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card

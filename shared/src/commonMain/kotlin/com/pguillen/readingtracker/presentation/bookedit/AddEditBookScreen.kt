@@ -37,11 +37,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.ReadingStatus
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.AddEditBook
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -96,13 +98,17 @@ fun AddEditBookScreen(
 			TopAppBar(
 				title = {
 					Text(
+						modifier = Modifier.testTag(AddEditBook.SCREEN_TITLE),
 						text = uiState.screenTitle,
 						fontWeight = FontWeight.SemiBold,
 						color = ReadingTrackerColors.textPrimary
 					)
 				},
 				navigationIcon = {
-					IconButton(onClick = onNavigateBack) {
+					IconButton(
+						modifier = Modifier.testTag(AddEditBook.BACK_BUTTON),
+						onClick = onNavigateBack
+					) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -121,12 +127,14 @@ fun AddEditBookScreen(
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
 				.padding(innerPadding)
-				.padding(horizontal = 20.dp),
+				.padding(horizontal = 20.dp)
+				.testTag(AddEditBook.SCREEN),
 			verticalArrangement = Arrangement.spacedBy(18.dp)
 		) {
 			Spacer(modifier = Modifier.height(4.dp))
 
 			BookTextField(
+				modifier = Modifier.testTag(AddEditBook.TITLE_FIELD),
 				value = uiState.title,
 				onValueChange = onTitleChanged,
 				label = "Title",
@@ -135,6 +143,7 @@ fun AddEditBookScreen(
 			)
 
 			BookTextField(
+				modifier = Modifier.testTag(AddEditBook.AUTHOR_FIELD),
 				value = uiState.author,
 				onValueChange = onAuthorChanged,
 				label = "Author",
@@ -143,6 +152,7 @@ fun AddEditBookScreen(
 			)
 
 			BookTextField(
+				modifier = Modifier.testTag(AddEditBook.TOTAL_PAGES_FIELD),
 				value = uiState.totalPages,
 				onValueChange = onTotalPagesChanged,
 				label = "Total pages",
@@ -152,6 +162,7 @@ fun AddEditBookScreen(
 			)
 
 			BookTextField(
+				modifier = Modifier.testTag(AddEditBook.CURRENT_PAGE_FIELD),
 				value = uiState.currentPage,
 				onValueChange = onCurrentPageChanged,
 				label = "Current page",
@@ -190,7 +201,8 @@ fun AddEditBookScreen(
 			Button(
 				onClick = onSaveClicked,
 				enabled = uiState.canSave,
-				modifier = Modifier.fillMaxWidth(),
+				modifier = Modifier.fillMaxWidth()
+					.testTag(AddEditBook.SAVE_BUTTON),
 				shape = RoundedCornerShape(18.dp),
 				colors = ButtonDefaults.buttonColors(
 					containerColor = ReadingTrackerColors.primaryGreen,
@@ -218,6 +230,7 @@ fun AddEditBookScreen(
 
 @Composable
 private fun BookTextField(
+	modifier: Modifier,
 	value: String,
 	onValueChange: (String) -> Unit,
 	label: String,
@@ -229,7 +242,7 @@ private fun BookTextField(
 	OutlinedTextField(
 		value = value,
 		onValueChange = onValueChange,
-		modifier = Modifier.fillMaxWidth(),
+		modifier = modifier.fillMaxWidth(),
 		label = {
 			Text(label)
 		},
@@ -275,18 +288,21 @@ private fun ReadingStatusSelector(
 		verticalArrangement = Arrangement.spacedBy(8.dp)
 	) {
 		StatusChip(
+			modifier = Modifier.testTag(AddEditBook.STATUS_WANT_TO_READ),
 			text = "Want to read",
 			selected = selectedStatus == ReadingStatus.WANT_TO_READ,
 			onClick = { onStatusSelected(ReadingStatus.WANT_TO_READ) }
 		)
 
 		StatusChip(
+			modifier = Modifier.testTag(AddEditBook.STATUS_READING),
 			text = "Reading",
 			selected = selectedStatus == ReadingStatus.READING,
 			onClick = { onStatusSelected(ReadingStatus.READING) }
 		)
 
 		StatusChip(
+			modifier = Modifier.testTag(AddEditBook.STATUS_FINISHED),
 			text = "Finished",
 			selected = selectedStatus == ReadingStatus.FINISHED,
 			onClick = { onStatusSelected(ReadingStatus.FINISHED) }
@@ -296,11 +312,13 @@ private fun ReadingStatusSelector(
 
 @Composable
 private fun StatusChip(
+	modifier: Modifier,
 	text: String,
 	selected: Boolean,
 	onClick: () -> Unit
 ) {
 	FilterChip(
+		modifier = modifier,
 		selected = selected,
 		onClick = onClick,
 		label = {

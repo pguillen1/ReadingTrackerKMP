@@ -15,7 +15,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -38,11 +37,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.BookNoteType
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.AddEditNote
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -94,6 +95,7 @@ fun AddEditNoteScreen(
 				title = {
 					Column {
 						Text(
+							modifier = Modifier.testTag(AddEditNote.SCREEN_TITLE),
 							text = uiState.title,
 							fontWeight = FontWeight.SemiBold,
 							color = ReadingTrackerColors.textPrimary
@@ -109,7 +111,10 @@ fun AddEditNoteScreen(
 					}
 				},
 				navigationIcon = {
-					IconButton(onClick = onNavigateBack) {
+					IconButton(
+						modifier = Modifier.testTag(AddEditNote.BACK_BUTTON),
+						onClick = onNavigateBack
+					) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -128,7 +133,8 @@ fun AddEditNoteScreen(
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
 				.padding(innerPadding)
-				.padding(horizontal = 20.dp),
+				.padding(horizontal = 20.dp)
+				.testTag(AddEditNote.SCREEN),
 			verticalArrangement = Arrangement.spacedBy(18.dp)
 		) {
 			Spacer(modifier = Modifier.height(4.dp))
@@ -143,7 +149,8 @@ fun AddEditNoteScreen(
 				onValueChange = onContentChanged,
 				modifier = Modifier
 					.fillMaxWidth()
-					.height(180.dp),
+					.height(180.dp)
+					.testTag(AddEditNote.CONTENT_FIELD),
 				label = {
 					Text("Content")
 				},
@@ -166,7 +173,7 @@ fun AddEditNoteScreen(
 			OutlinedTextField(
 				value = uiState.page,
 				onValueChange = onPageChanged,
-				modifier = Modifier.fillMaxWidth(),
+				modifier = Modifier.fillMaxWidth().testTag(AddEditNote.PAGE_FIELD),
 				label = {
 					Text("Page")
 				},
@@ -200,7 +207,7 @@ fun AddEditNoteScreen(
 			Button(
 				onClick = onSaveClicked,
 				enabled = uiState.canSave,
-				modifier = Modifier.fillMaxWidth(),
+				modifier = Modifier.fillMaxWidth().testTag(AddEditNote.SAVE_BUTTON),
 				shape = RoundedCornerShape(18.dp),
 				colors = ButtonDefaults.buttonColors(
 					containerColor = ReadingTrackerColors.primaryGreen,
@@ -236,12 +243,14 @@ private fun NoteTypeSelector(
 		verticalArrangement = Arrangement.spacedBy(8.dp)
 	) {
 		NoteTypeChip(
+			modifier = Modifier.testTag(AddEditNote.TYPE_NOTE),
 			text = "Note",
 			selected = selectedType == BookNoteType.NOTE,
 			onClick = { onTypeSelected(BookNoteType.NOTE) }
 		)
 
 		NoteTypeChip(
+			modifier = Modifier.testTag(AddEditNote.TYPE_QUOTE),
 			text = "Quote",
 			selected = selectedType == BookNoteType.QUOTE,
 			onClick = { onTypeSelected(BookNoteType.QUOTE) }
@@ -251,11 +260,13 @@ private fun NoteTypeSelector(
 
 @Composable
 private fun NoteTypeChip(
+	modifier: Modifier,
 	text: String,
 	selected: Boolean,
 	onClick: () -> Unit
 ) {
 	FilterChip(
+		modifier = modifier,
 		selected = selected,
 		onClick = onClick,
 		label = {

@@ -42,11 +42,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.Book
 import com.pguillen.readingtracker.domain.model.ReadingStatus
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.Library
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -87,6 +89,7 @@ fun LibraryScreen(
 	Scaffold(
 		floatingActionButton = {
 			FloatingActionButton(
+				modifier = Modifier.testTag(Library.ADD_BOOK_FAB),
 				onClick = onAddBookClick,
 				containerColor = ReadingTrackerColors.primaryGreen,
 				contentColor = ReadingTrackerColors.onPrimary
@@ -105,6 +108,7 @@ fun LibraryScreen(
 				.background(ReadingTrackerColors.background)
 				.padding(innerPadding)
 				.padding(horizontal = 20.dp, vertical = 16.dp)
+				.testTag(Library.SCREEN)
 		) {
 			LibraryHeader()
 
@@ -127,6 +131,7 @@ fun LibraryScreen(
 			when {
 				uiState.isLoading -> {
 					Text(
+						modifier = Modifier.testTag(Library.LOADING_TEXT),
 						text = "Loading books...",
 						style = MaterialTheme.typography.bodyMedium,
 						color = ReadingTrackerColors.textSecondary
@@ -160,7 +165,7 @@ private fun LibraryHeader() {
 			style = MaterialTheme.typography.headlineMedium,
 			fontWeight = FontWeight.Bold,
 			color = ReadingTrackerColors.textPrimary,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Library.SCREEN_TITLE)
 		)
 	}
 }
@@ -174,7 +179,7 @@ private fun SearchField(
 	OutlinedTextField(
 		value = value,
 		onValueChange = onValueChange,
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth().testTag(Library.SEARCH_FIELD),
 		placeholder = {
 			Text("Search books...")
 		},
@@ -212,18 +217,21 @@ private fun FilterRow(
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		LibraryFilterChip(
+			modifier = Modifier.testTag(Library.FILTER_WANT_TO_READ),
 			text = "Want to read",
 			selected = selectedFilter == LibraryFilter.WANT_TO_READ,
 			onClick = { onFilterSelected(LibraryFilter.WANT_TO_READ) }
 		)
 
 		LibraryFilterChip(
+			modifier = Modifier.testTag(Library.FILTER_READING),
 			text = "Reading",
 			selected = selectedFilter == LibraryFilter.READING,
 			onClick = { onFilterSelected(LibraryFilter.READING) }
 		)
 
 		LibraryFilterChip(
+			modifier = Modifier.testTag(Library.FILTER_FINISHED),
 			text = "Finished",
 			selected = selectedFilter == LibraryFilter.FINISHED,
 			onClick = { onFilterSelected(LibraryFilter.FINISHED) }
@@ -233,11 +241,13 @@ private fun FilterRow(
 
 @Composable
 private fun LibraryFilterChip(
+	modifier: Modifier,
 	text: String,
 	selected: Boolean,
 	onClick: () -> Unit
 ) {
 	AssistChip(
+		modifier = modifier,
 		onClick = onClick,
 		label = {
 			Text(
@@ -288,7 +298,8 @@ private fun BookListItem(
 ) {
 	Card(
 		onClick = onClick,
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth()
+			.testTag(Library.bookCard(book.id)),
 		shape = RoundedCornerShape(22.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
@@ -449,6 +460,7 @@ private fun EmptyLibraryState() {
 		Spacer(modifier = Modifier.height(12.dp))
 
 		Text(
+			modifier = Modifier.testTag(Library.NO_BOOKS_FOUND),
 			text = "No books found",
 			style = MaterialTheme.typography.titleMedium,
 			fontWeight = FontWeight.SemiBold,

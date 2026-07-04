@@ -41,10 +41,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.ReadingSession
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookSessions
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -90,6 +92,7 @@ fun BookSessionsScreen(
 				title = {
 					Column {
 						Text(
+							modifier = Modifier.testTag(BookSessions.SCREEN_TITLE),
 							text = "Reading sessions",
 							fontWeight = FontWeight.SemiBold,
 							color = ReadingTrackerColors.textPrimary
@@ -107,7 +110,10 @@ fun BookSessionsScreen(
 					}
 				},
 				navigationIcon = {
-					IconButton(onClick = onNavigateBack) {
+					IconButton(
+						modifier = Modifier.testTag(BookSessions.BACK_BUTTON),
+						onClick = onNavigateBack
+					) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -122,6 +128,7 @@ fun BookSessionsScreen(
 		},
 		floatingActionButton = {
 			FloatingActionButton(
+				modifier = Modifier.testTag(BookSessions.ADD_BUTTON),
 				onClick = onAddSessionClick,
 				containerColor = ReadingTrackerColors.primaryGreen,
 				contentColor = ReadingTrackerColors.onPrimary
@@ -138,6 +145,7 @@ fun BookSessionsScreen(
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
 				.padding(innerPadding)
+				.testTag(BookSessions.SCREEN)
 		) {
 			when {
 				uiState.isLoading -> {
@@ -145,6 +153,7 @@ fun BookSessionsScreen(
 						text = "Loading sessions...",
 						color = ReadingTrackerColors.textSecondary,
 						modifier = Modifier.align(Alignment.Center)
+							.testTag(BookSessions.LOADING_TEXT)
 					)
 				}
 
@@ -159,6 +168,7 @@ fun BookSessionsScreen(
 				uiState.isEmpty -> {
 					EmptySessionsState(
 						modifier = Modifier.align(Alignment.Center)
+							.testTag(BookSessions.EMPTY_SCREEN)
 					)
 				}
 
@@ -190,7 +200,7 @@ private fun SessionsList(
 	onDeleteSessionClick: (ReadingSession) -> Unit
 ) {
 	LazyColumn(
-		modifier = Modifier.fillMaxSize(),
+		modifier = Modifier.fillMaxSize().testTag(BookSessions.SESSIONS_LIST),
 		contentPadding = PaddingValues(
 			start = 20.dp,
 			end = 20.dp,
@@ -225,7 +235,8 @@ private fun SessionCard(
 	Card(
 		modifier = Modifier
 			.fillMaxWidth()
-			.clickable(onClick = onClick),
+			.clickable(onClick = onClick)
+			.testTag(BookSessions.sessionCard(session.id)),
 		shape = RoundedCornerShape(24.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
