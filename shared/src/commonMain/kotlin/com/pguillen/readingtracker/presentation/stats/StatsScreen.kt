@@ -37,8 +37,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.Stats
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import kotlinx.datetime.number
 import org.koin.compose.viewmodel.koinViewModel
@@ -65,7 +67,8 @@ fun StatsScreen(
 			modifier = Modifier
 				.fillMaxSize()
 				.background(ReadingTrackerColors.background)
-				.padding(innerPadding),
+				.padding(innerPadding)
+				.testTag(Stats.SCREEN),
 			contentPadding = PaddingValues(
 				start = 20.dp,
 				end = 20.dp,
@@ -94,6 +97,7 @@ fun StatsScreen(
 @Composable
 private fun StatsHeader() {
 	Text(
+		modifier = Modifier.testTag(Stats.SCREEN_TITLE),
 		text = "Stats",
 		style = MaterialTheme.typography.headlineMedium,
 		fontWeight = FontWeight.Bold,
@@ -115,42 +119,42 @@ private fun StatsCardsGrid(
 			title = "Total books",
 			value = uiState.totalBooks.toString(),
 			icon = Icons.AutoMirrored.Outlined.MenuBook,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Stats.TOTAL_BOOKS_CARD)
 		)
 
 		StatCard(
 			title = "Finished",
 			value = uiState.finishedBooks.toString(),
 			icon = Icons.Outlined.CheckCircle,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Stats.FINISHED_CARD)
 		)
 
 		StatCard(
 			title = "Reading",
 			value = uiState.readingBooks.toString(),
 			icon = Icons.Outlined.AutoStories,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Stats.READING_CARD)
 		)
 
 		StatCard(
 			title = "Sessions",
 			value = uiState.totalSessions.toString(),
 			icon = Icons.Outlined.Schedule,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Stats.SESSIONS_CARD)
 		)
 
 		StatCard(
 			title = "Pages read",
 			value = uiState.totalPagesRead.toString(),
 			icon = Icons.AutoMirrored.Outlined.TrendingUp,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Stats.PAGES_READ_CARD)
 		)
 
 		StatCard(
 			title = "Minutes",
 			value = uiState.totalMinutesRead.toString(),
 			icon = Icons.Outlined.Timer,
-			modifier = Modifier.weight(1f)
+			modifier = Modifier.weight(1f).testTag(Stats.MINUTES_CARD)
 		)
 	}
 }
@@ -213,7 +217,7 @@ private fun RecentActivityCard(
 	summaries: List<DailyReadingSummary>
 ) {
 	Card(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth().testTag(Stats.RECENT_ACTIVITY_CARD),
 		shape = RoundedCornerShape(26.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
