@@ -47,6 +47,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,8 @@ import com.pguillen.readingtracker.domain.model.BookNote
 import com.pguillen.readingtracker.domain.model.BookNoteType
 import com.pguillen.readingtracker.domain.model.ReadingSession
 import com.pguillen.readingtracker.domain.model.ReadingStatus
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -116,13 +119,16 @@ fun BookDetailScreen(
 			TopAppBar(
 				title = {
 					Text(
+						modifier = Modifier.testTag(BookDetail.SCREEN_TITLE),
 						text = "Book details",
 						fontWeight = FontWeight.SemiBold,
 						color = ReadingTrackerColors.textPrimary
 					)
 				},
 				navigationIcon = {
-					IconButton(onClick = onNavigateBack) {
+					IconButton(
+						modifier = Modifier.testTag(BookDetail.BACK_BUTTON),
+						onClick = onNavigateBack) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -134,6 +140,7 @@ fun BookDetailScreen(
 					val bookId = uiState.book?.id
 					if (bookId != null) {
 						IconButton(
+							modifier = Modifier.testTag(BookDetail.EDIT_BUTTON),
 							onClick = {
 								onEditBookClick(bookId)
 							}
@@ -146,6 +153,7 @@ fun BookDetailScreen(
 						}
 
 						IconButton(
+							modifier = Modifier.testTag(BookDetail.DELETE_BUTTON),
 							onClick = onDeleteBookClick
 						) {
 							Icon(
@@ -233,7 +241,8 @@ private fun BookDetailContent(
 	LazyColumn(
 		modifier = modifier
 			.fillMaxSize()
-			.background(ReadingTrackerColors.background),
+			.background(ReadingTrackerColors.background)
+			.testTag(BookDetail.SCREEN),
 		contentPadding = PaddingValues(
 			start = 20.dp,
 			end = 20.dp,
@@ -277,7 +286,7 @@ private fun BookHeroCard(
 	book: Book
 ) {
 	Card(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth().testTag(BookDetail.BOOK_CARD),
 		shape = RoundedCornerShape(28.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
@@ -403,7 +412,7 @@ private fun BookActionButtons(
 			onClick = {
 				onLogSessionClick(bookId)
 			},
-			modifier = Modifier.weight(1f),
+			modifier = Modifier.weight(1f).testTag(BookDetail.ADD_SESSION_BUTTON),
 			shape = RoundedCornerShape(18.dp),
 			colors = ButtonDefaults.buttonColors(
 				containerColor = ReadingTrackerColors.primaryGreen,
@@ -424,7 +433,7 @@ private fun BookActionButtons(
 			onClick = {
 				onAddNoteClick(bookId)
 			},
-			modifier = Modifier.weight(1f),
+			modifier = Modifier.weight(1f).testTag(BookDetail.ADD_NOTE_BUTTON),
 			shape = RoundedCornerShape(18.dp),
 			colors = ButtonDefaults.outlinedButtonColors(
 				contentColor = ReadingTrackerColors.primaryGreen
@@ -449,7 +458,7 @@ private fun RecentSessionsCard(
 	onSeeAllClick: (String) -> Unit
 ) {
 	Card(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth().testTag(BookDetail.RECENT_SESSIONS_CARD),
 		shape = RoundedCornerShape(24.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
@@ -531,7 +540,7 @@ private fun RecentNotesCard(
 	onSeeAllClick: (String) -> Unit
 ) {
 	Card(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth().testTag(BookDetail.RECENT_NOTES_CARD),
 		shape = RoundedCornerShape(24.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card
