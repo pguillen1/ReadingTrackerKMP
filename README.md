@@ -7,19 +7,15 @@ This project was created as a portfolio app focused on Android development, clea
 
 ## Live Demo
 
-Web demo: **add your GitHub Pages URL here**
+Web demo: **https://pguillen1.github.io/ReadingTrackerKMP/**
 
 > The web version is a portfolio demo presented in a fixed mobile viewport. The app is primarily designed as an Android mobile application.
 
 ## Screenshots
 
-Add screenshots here:
-
-```md
 | Library | Book Detail | Stats | Settings |
 |--------|-------------|-------|----------|
-| ![](docs/screenshots/library.png) | ![](docs/screenshots/detail.png) | ![](docs/screenshots/stats.png) | ![](docs/screenshots/settings.png) |
-```
+| <img src="docs/screenshots/library.png" width="200"/> | <img src="docs/screenshots/book_detail.png" width="200"/> | <img src="docs/screenshots/stats.png" width="200"/> | <img src="docs/screenshots/settings.png" width="200"/> |
 
 ## Features
 
