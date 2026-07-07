@@ -34,6 +34,9 @@ jobs:
       - name: Make Gradle executable
         run: chmod +x ./gradlew
 
+      - name: Run checks
+        run: ./gradlew check
+
       - name: Build WASM distribution
         run: ./gradlew :webApp:wasmJsBrowserDistribution
 
