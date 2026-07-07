@@ -13,13 +13,9 @@ Web demo: **https://pguillen1.github.io/ReadingTrackerKMP/**
 
 ## Screenshots
 
-| Library | Book Detail | Add Session |
-|--------|-------------|-------------|
-| <img src="docs/screenshots/library.png" width="250"/> | <img src="docs/screenshots/book_detail.png" width="250"/> | <img src="docs/screenshots/add_session.png" width="250"/> |
-
-| Notes | Stats | Settings |
-|------|-------|----------|
-| <img src="docs/screenshots/notes.png" width="250"/> | <img src="docs/screenshots/stats.png" width="250"/> | <img src="docs/screenshots/settings.png" width="250"/> |
+| Library | Book Detail | Stats | Settings |
+|--------|-------------|-------|----------|
+| <img src="docs/screenshots/library.png" width="200"/> | <img src="docs/screenshots/book_detail.png" width="200"/> | <img src="docs/screenshots/stats.png" width="200"/> | <img src="docs/screenshots/settings.png" width="200"/> |
 
 ## Features
 
