@@ -1,37 +1,141 @@
-This is a Kotlin Multiplatform project targeting Android, Web.
+# Reading Tracker
 
-* [/shared](./shared/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./shared/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./shared/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./shared/src/jvmMain/kotlin)
-    folder is the appropriate location.
+Reading Tracker is a mobile-first book journal app built with **Kotlin Multiplatform** and **Compose Multiplatform**.
+The goal of the project is to track books, reading progress, sessions, notes, and basic reading statistics using a clean local-first architecture.
 
-### Running the apps
+This project was created as a portfolio app focused on Android development, clean architecture, local persistence, testing, and multiplatform code sharing.
 
-Use the run configurations provided by the run widget in your IDE's toolbar. You can also use these commands and options:
+## Live Demo
 
-- Android app: `./gradlew :androidApp:assembleDebug`
-- Web app:
-  - Wasm target (faster, modern browsers): `./gradlew :webApp:wasmJsBrowserDevelopmentRun`
-  - JS target (slower, supports older browsers): `./gradlew :webApp:jsBrowserDevelopmentRun`
+Web demo: **add your GitHub Pages URL here**
 
-### Running tests
+> The web version is a portfolio demo presented in a fixed mobile viewport. The app is primarily designed as an Android mobile application.
 
-Use the run button in your IDE's editor gutter, or run tests using Gradle tasks:
+## Screenshots
 
-- Android tests: `./gradlew :shared:testAndroidHostTest`
-- Web tests:
-  - Wasm target: `./gradlew :shared:wasmJsTest`
-  - JS target: `./gradlew :shared:jsTest`
+Add screenshots here:
 
----
+```md
+| Library | Book Detail | Stats | Settings |
+|--------|-------------|-------|----------|
+| ![](docs/screenshots/library.png) | ![](docs/screenshots/detail.png) | ![](docs/screenshots/stats.png) | ![](docs/screenshots/settings.png) |
+```
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+## Features
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+* Local book library
+* Add and edit books
+* Track book status:
+
+  * Want to Read
+  * Reading
+  * Finished
+* Track current page and total progress
+* Register reading sessions
+* Add notes and quotes for each book
+* View recent sessions and recent notes
+* Filter books by reading status
+* Search books locally
+* Reading statistics:
+
+  * Total books
+  * Finished books
+  * Currently reading books
+  * Total reading sessions
+  * Pages read
+  * Minutes read
+  * Recent reading activity
+* Settings with persisted user preferences
+* Android launcher icon and app branding
+* Web demo deployed with GitHub Pages
+
+## Tech Stack
+
+### Core
+
+* Kotlin
+* Kotlin Multiplatform
+* Compose Multiplatform
+* Jetpack Compose
+* Material 3
+* Coroutines
+* Flow / StateFlow
+
+### Architecture
+
+* Clean Architecture inspired structure
+* Presentation / Domain / Data separation
+* Repository pattern
+* Use cases for business logic
+* ViewModels with reactive UI state
+* One-shot UI effects for navigation and messages
+
+### Persistence
+
+* SQLDelight for local database storage
+* DataStore for user preferences
+* Local-first approach
+* Fake implementations for the web demo target
+
+### Dependency Injection
+
+* Koin
+
+### Testing
+
+* Unit tests for use cases
+* ViewModel tests
+* Repository integration tests with SQLDelight
+* Android Compose UI tests for screen rendering and user interactions
+
+### CI/CD
+
+* GitHub Actions
+* GitHub Pages deployment
+* Web demo generated from the Compose Multiplatform WASM distribution
+
+## Web Demo
+
+The web demo is built with Compose Multiplatform and deployed using GitHub Actions to GitHub Pages.
+
+The Android app is the main target, while the web version exists to make the project easier to preview from a portfolio, CV, or GitHub profile.
+
+## Current Status
+
+Version 1 is focused on a complete local-first reading tracker experience:
+
+* Local book management
+* Reading progress tracking
+* Notes and quotes
+* Reading sessions
+* Basic statistics
+* Settings persistence
+* Automated deployment for the web demo
+* Unit, ViewModel, integration, and UI test coverage
+
+## Future Improvements
+
+Possible improvements for future versions:
+
+* Book search using an external API
+* Book cover support
+* Reading goals
+* More advanced statistics
+* Export/import data
+* Notifications or reading reminders
+* Better tablet and responsive layouts
+* Google Play release
+* iOS UI using SwiftUI with shared KMP domain/data logic
+
+## Why This Project
+
+This project was built to demonstrate:
+
+* Practical Android development with Kotlin
+* Kotlin Multiplatform project structure
+* Compose-based UI development
+* Local persistence with SQLDelight and DataStore
+* Clean Architecture principles
+* Testable business logic
+* Automated deployment with GitHub Actions
+* A complete mobile app workflow from implementation to portfolio demo
