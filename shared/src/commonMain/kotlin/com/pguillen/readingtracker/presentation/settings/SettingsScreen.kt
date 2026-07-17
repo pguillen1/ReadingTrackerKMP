@@ -1,6 +1,7 @@
 package com.pguillen.readingtracker.presentation.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -35,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -49,11 +51,13 @@ fun SettingsRoute(
 	viewModel: SettingsViewModel = koinViewModel()
 ) {
 	val uiState by viewModel.uiState.collectAsState()
+	val uriHandler = LocalUriHandler.current
 
 	SettingsScreen(
 		uiState = uiState,
 		onThemePreferenceChanged = viewModel::onThemePreferenceChanged,
-		onDefaultSortOptionChanged = viewModel::onDefaultSortOptionChanged
+		onDefaultSortOptionChanged = viewModel::onDefaultSortOptionChanged,
+		onPrivacyPolicyClicked = { uriHandler.openUri("https://pguillen1.github.io/Portfolio/privacy/reading-tracker/") }
 	)
 }
 
@@ -61,7 +65,8 @@ fun SettingsRoute(
 fun SettingsScreen(
 	uiState: SettingsUiState,
 	onThemePreferenceChanged: (ThemePreference) -> Unit,
-	onDefaultSortOptionChanged: (BookSortOption) -> Unit
+	onDefaultSortOptionChanged: (BookSortOption) -> Unit,
+	onPrivacyPolicyClicked: () -> Unit
 ) {
 	Scaffold(
 		containerColor = ReadingTrackerColors.background
@@ -132,11 +137,13 @@ fun SettingsScreen(
 
 			item {
 				SettingsCard(
-					modifier = Modifier.testTag(Settings.ABOUT_CARD)
+					modifier = Modifier
+						.clickable { onPrivacyPolicyClicked() }
+						.testTag(Settings.PRIVACY_POLICY)
 				) {
 					SettingsOptionHeader(
 						icon = Icons.Outlined.Info,
-						title = "About Reading Tracker",
+						title = "Privacy Policy",
 						subtitle = "Version 1.0.0"
 					)
 				}

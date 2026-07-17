@@ -117,6 +117,6 @@ object ReadingTrackerTestTags {
 		const val SORT_BY_TITLE = "settings_default_sort_by_title"
 		const val SORT_BY_AUTHOR = "settings_default_sort_by_author"
 		const val SORT_BY_PROGRESS = "settings_default_sort_by_progress"
-		const val ABOUT_CARD = "settings_about_card"
+		const val PRIVACY_POLICY = "settings_privacy_policy"
 	}
 }

@@ -8,6 +8,7 @@ import com.pguillen.readingtracker.domain.model.BookSortOption
 import com.pguillen.readingtracker.domain.model.ThemePreference
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerTheme
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -59,7 +60,7 @@ class SettingsScreenTest {
 		composeRule.onNodeWithTag(ReadingTrackerTestTags.Settings.SORT_BY_PROGRESS)
 			.assertIsDisplayed()
 
-		composeRule.onNodeWithTag(ReadingTrackerTestTags.Settings.ABOUT_CARD)
+		composeRule.onNodeWithTag(ReadingTrackerTestTags.Settings.PRIVACY_POLICY)
 			.assertIsDisplayed()
 	}
 
@@ -95,17 +96,35 @@ class SettingsScreenTest {
 		assertEquals(BookSortOption.TITLE, sortSelected)
 	}
 
+	@Test
+	fun clickingPrivacyPolicyCardCallsCallback() {
+		var privacyPolicyClicked = false
+
+		setContent(
+			onPrivacyPolicyClicked = {
+				privacyPolicyClicked = true
+			}
+		)
+
+		composeRule.onNodeWithTag(ReadingTrackerTestTags.Settings.PRIVACY_POLICY)
+			.performClick()
+
+		assertTrue(privacyPolicyClicked)
+	}
+
 	private fun setContent(
 		uiState: SettingsUiState = createSettingsUiState(),
 		onThemePreferenceChanged: (ThemePreference) -> Unit = {},
-		onDefaultSortOptionChanged: (BookSortOption) -> Unit = {}
+		onDefaultSortOptionChanged: (BookSortOption) -> Unit = {},
+		onPrivacyPolicyClicked: () -> Unit = {}
 	) {
 		composeRule.setContent {
 			ReadingTrackerTheme(themePreference = ThemePreference.LIGHT) {
 				SettingsScreen(
 					uiState = uiState,
 					onThemePreferenceChanged = onThemePreferenceChanged,
-					onDefaultSortOptionChanged = onDefaultSortOptionChanged
+					onDefaultSortOptionChanged = onDefaultSortOptionChanged,
+					onPrivacyPolicyClicked = onPrivacyPolicyClicked
 				)
 			}
 		}
