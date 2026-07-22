@@ -136,7 +136,7 @@ class AddEditReadingSessionViewModel(
 				_uiState.update {
 					it.copy(
 						bookTitle = book?.title.orEmpty(),
-						totalPages = book?.totalPages,
+						totalPages = book?.totalPages ?: 0,
 						errorMessage = if (book == null) "Book not found" else it.errorMessage
 					)
 				}

@@ -244,7 +244,7 @@ class BookDetailScreenTest {
 		id: String = BOOK_ID,
 		title: String = BOOK_TITLE,
 		author: String = BOOK_AUTHOR,
-		totalPages: Int? = BOOK_TOTAL_PAGES,
+		totalPages: Int = BOOK_TOTAL_PAGES,
 		currentPage: Int = BOOK_CURRENT_PAGE,
 		status: ReadingStatus = ReadingStatus.READING
 	): Book {

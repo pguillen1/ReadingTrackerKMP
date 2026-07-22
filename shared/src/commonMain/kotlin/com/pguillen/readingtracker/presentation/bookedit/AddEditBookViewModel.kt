@@ -69,7 +69,7 @@ class AddEditBookViewModel(
 						it.copy(
 							title = book.title,
 							author = book.author,
-							totalPages = book.totalPages?.toString().orEmpty(),
+							totalPages = book.totalPages.toString(),
 							currentPage = book.currentPage.toString(),
 							selectedStatus = book.status,
 							isEditMode = true,
@@ -149,7 +149,7 @@ class AddEditBookViewModel(
 							AddBookParams(
 								title = state.title,
 								author = state.author,
-								totalPages = state.totalPages.toIntOrNull(),
+								totalPages = if (state.totalPages.isNotBlank()) state.totalPages.toInt() else 0,
 								currentPage = state.currentPage.toIntOrNull() ?: 0,
 								status = state.selectedStatus
 							)
@@ -165,7 +165,7 @@ class AddEditBookViewModel(
 								bookId = currentBookId,
 								title = state.title,
 								author = state.author,
-								totalPages = state.totalPages.toIntOrNull(),
+								totalPages = state.totalPages.toInt(),
 								currentPage = state.currentPage.toIntOrNull() ?: 0,
 								status = state.selectedStatus
 							)

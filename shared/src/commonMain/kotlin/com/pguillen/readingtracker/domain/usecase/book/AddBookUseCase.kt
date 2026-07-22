@@ -10,7 +10,7 @@ import com.pguillen.readingtracker.domain.repository.BookRepository
 data class AddBookParams(
 	val title: String,
 	val author: String,
-	val totalPages: Int?,
+	val totalPages: Int,
 	val currentPage: Int,
 	val status: ReadingStatus
 )
@@ -31,7 +31,7 @@ class AddBookUseCase(
 		val today = dateTimeProvider.today()
 
 		val currentPage = when {
-			params.status == ReadingStatus.FINISHED && params.totalPages != null -> params.totalPages
+			params.status == ReadingStatus.FINISHED -> params.totalPages
 			else -> params.currentPage
 		}
 
@@ -62,14 +62,14 @@ class AddBookUseCase(
 
 	private fun validateBookInput(
 		title: String,
-		totalPages: Int?,
+		totalPages: Int,
 		currentPage: Int
 	) {
 		if (title.isBlank()) {
 			throw DomainException.Validation("Book title cannot be empty")
 		}
 
-		if (totalPages != null && totalPages <= 0) {
+		if (totalPages <= 0) {
 			throw DomainException.Validation("Total pages must be greater than 0")
 		}
 
@@ -77,7 +77,7 @@ class AddBookUseCase(
 			throw DomainException.Validation("Current page cannot be negative")
 		}
 
-		if (totalPages != null && currentPage > totalPages) {
+		if (currentPage > totalPages) {
 			throw DomainException.Validation("Current page cannot be greater than total pages")
 		}
 	}

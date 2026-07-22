@@ -11,7 +11,7 @@ data class UpdateBookParams(
 	val bookId: String,
 	val title: String,
 	val author: String,
-	val totalPages: Int?,
+	val totalPages: Int,
 	val currentPage: Int,
 	val status: ReadingStatus
 )
@@ -31,7 +31,7 @@ class UpdateBookUseCase(
 		)
 
 		val resolvedCurrentPage = when {
-			params.status == ReadingStatus.FINISHED && params.totalPages != null -> params.totalPages
+			params.status == ReadingStatus.FINISHED -> params.totalPages
 			else -> params.currentPage
 		}
 
@@ -79,14 +79,14 @@ class UpdateBookUseCase(
 
 	private fun validateBookInput(
 		title: String,
-		totalPages: Int?,
+		totalPages: Int,
 		currentPage: Int
 	) {
 		if (title.isBlank()) {
 			throw DomainException.Validation("Book title cannot be empty")
 		}
 
-		if (totalPages != null && totalPages <= 0) {
+		if (totalPages <= 0) {
 			throw DomainException.Validation("Total pages must be greater than 0")
 		}
 
@@ -94,7 +94,7 @@ class UpdateBookUseCase(
 			throw DomainException.Validation("Current page cannot be negative")
 		}
 
-		if (totalPages != null && currentPage > totalPages) {
+		if (currentPage > totalPages) {
 			throw DomainException.Validation("Current page cannot be greater than total pages")
 		}
 	}
