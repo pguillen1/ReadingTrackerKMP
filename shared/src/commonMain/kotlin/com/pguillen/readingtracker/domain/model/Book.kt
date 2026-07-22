@@ -7,7 +7,7 @@ data class Book(
     val id: String,
     val title: String,
     val author: String,
-    val totalPages: Int?,
+    val totalPages: Int,
     val currentPage: Int,
     val status: ReadingStatus,
     val startedAt: LocalDate?,
@@ -17,7 +17,7 @@ data class Book(
 ) {
     val progressPercentage: Float
         get() {
-            if (totalPages == null || totalPages <= 0) return 0f
+            if (totalPages <= 0) return 0f
             return (currentPage.toFloat() / totalPages.toFloat()).coerceIn(0f, 1f)
         }
 

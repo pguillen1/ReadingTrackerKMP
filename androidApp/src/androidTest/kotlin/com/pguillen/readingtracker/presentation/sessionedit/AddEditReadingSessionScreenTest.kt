@@ -220,7 +220,7 @@ class AddEditReadingSessionScreenTest {
 		isLoading: Boolean = false,
 		isEditMode: Boolean = false,
 		bookTitle: String = BOOK_TITLE,
-		totalPages: Int? = BOOK_TOTAL_PAGES,
+		totalPages: Int = BOOK_TOTAL_PAGES,
 		startPage: String = "",
 		endPage: String = "",
 		minutes: String = "",
