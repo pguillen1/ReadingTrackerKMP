@@ -1,6 +1,7 @@
 package com.pguillen.readingtracker.presentation.sessionedit
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +18,8 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,12 +28,16 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
@@ -41,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.AddEditSession
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
+import kotlinx.datetime.LocalDate
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -69,6 +77,7 @@ fun AddEditReadingSessionRoute(
 		onEndPageChanged = viewModel::onEndPageChanged,
 		onMinutesChanged = viewModel::onMinutesChanged,
 		onNoteChanged = viewModel::onNoteChanged,
+		onDateChanged = viewModel::onDateChanged,
 		onSaveClicked = viewModel::onSaveClicked
 	)
 }
@@ -82,9 +91,11 @@ fun AddEditReadingSessionScreen(
 	onEndPageChanged: (String) -> Unit,
 	onMinutesChanged: (String) -> Unit,
 	onNoteChanged: (String) -> Unit,
+	onDateChanged: (String) -> Unit,
 	onSaveClicked: () -> Unit
 ) {
 	val focusManager = LocalFocusManager.current
+	val showDatePicker = rememberSaveable { mutableStateOf(false) }
 
 	Scaffold(
 		containerColor = ReadingTrackerColors.background,
@@ -137,12 +148,34 @@ fun AddEditReadingSessionScreen(
 		) {
 			Spacer(modifier = Modifier.height(4.dp))
 
-			if (uiState.totalPages != null) {
-				Text(
-					modifier = Modifier.testTag(AddEditSession.TOTAL_PAGES_FIELD),
-					text = "Total pages: ${uiState.totalPages}",
-					style = MaterialTheme.typography.bodyMedium,
-					color = ReadingTrackerColors.textSecondary
+			Text(
+				modifier = Modifier.testTag(AddEditSession.TOTAL_PAGES_FIELD),
+				text = "Total pages: ${uiState.totalPages}",
+				style = MaterialTheme.typography.bodyMedium,
+				color = ReadingTrackerColors.textSecondary
+			)
+
+			SessionTextField(
+				modifier = Modifier
+					.clickable { showDatePicker.value = true }
+					.testTag(AddEditSession.DATE_FIELD),
+				value = uiState.date.toString(),
+				onValueChange = {},
+				label = "Date",
+				placeholder = "",
+				keyboardType = KeyboardType.Number,
+				imeAction = ImeAction.Next,
+				onImeAction = {
+					focusManager.moveFocus(FocusDirection.Down)
+				}
+			)
+
+			if (showDatePicker.value) {
+				SessionDatePickerDialog(
+					selectedDate = uiState.date,
+					today = uiState.date,
+					onDateSelected = onDateChanged,
+					onDismiss = { showDatePicker.value = false }
 				)
 			}
 
@@ -234,6 +267,63 @@ fun AddEditReadingSessionScreen(
 
 			Spacer(modifier = Modifier.height(20.dp))
 		}
+	}
+}
+
+@Composable
+fun SessionDatePickerDialog(
+	selectedDate: LocalDate,
+	today: LocalDate,
+	onDateSelected: (String) -> Unit,
+	onDismiss: () -> Unit,
+) {
+	val todayMillis = today.toEpochDays()
+
+//	val selectableDates = remember(todayMillis) {
+//		object : SelectableDates {
+//			override fun isSelectableDate(
+//				utcTimeMillis: Long,
+//			): Boolean {
+//				return utcTimeMillis <= todayMillis
+//			}
+//
+//			override fun isSelectableYear(year: Int): Boolean {
+//				return year <= today.year
+//			}
+//		}
+//	}
+
+	val datePickerState = rememberDatePickerState(
+		initialSelectedDateMillis = selectedDate.toEpochDays(),
+//		selectableDates = selectableDates,
+	)
+
+	DatePickerDialog(
+		onDismissRequest = onDismiss,
+		confirmButton = {
+			TextButton(
+				onClick = {
+					val selectedMillis =
+						datePickerState.selectedDateMillis
+							?: return@TextButton
+
+					onDateSelected(
+						LocalDate.fromEpochDays(selectedMillis).toString(),
+					)
+				},
+			) {
+				Text("Aceptar")
+			}
+		},
+		dismissButton = {
+			TextButton(onClick = onDismiss) {
+				Text("Cancelar")
+			}
+		},
+	) {
+		DatePicker(
+			state = datePickerState,
+		)
 	}
 }
 

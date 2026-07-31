@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 class AddEditReadingSessionViewModel(
 	private val mode: AddEditReadingSessionMode,
@@ -140,6 +141,25 @@ class AddEditReadingSessionViewModel(
 						errorMessage = if (book == null) "Book not found" else it.errorMessage
 					)
 				}
+			}
+		}
+	}
+
+	fun onDateChanged(date: String) {
+		try {
+			val dateParsed = LocalDate.parse(date)
+			_uiState.update {
+				it.copy(
+					date = dateParsed,
+					errorMessage = null
+				)
+			}
+		}
+		catch (exception: Exception) {
+			_uiState.update {
+				it.copy(
+					errorMessage = "Invalid date"
+				)
 			}
 		}
 	}

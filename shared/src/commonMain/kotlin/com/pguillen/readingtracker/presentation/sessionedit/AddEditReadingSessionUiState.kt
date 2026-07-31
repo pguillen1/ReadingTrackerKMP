@@ -5,7 +5,7 @@ import kotlinx.datetime.LocalDate
 data class AddEditReadingSessionUiState(
 	val bookTitle: String = "",
 	val totalPages: Int = 0,
-	val date: LocalDate? = null,
+	val date: LocalDate = LocalDate(1, 1, 1),
 	val startPage: String = "",
 	val endPage: String = "",
 	val minutes: String = "",
