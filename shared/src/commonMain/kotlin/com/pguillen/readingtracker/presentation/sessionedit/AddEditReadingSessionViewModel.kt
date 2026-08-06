@@ -78,6 +78,7 @@ class AddEditReadingSessionViewModel(
 						currentState.copy(
 							bookTitle = book.title,
 							totalPages = book.totalPages,
+							today = dateTimeProvider.today(),
 							date = dateTimeProvider.today(),
 							startPage = book.currentPage.toString(),
 							endPage = book.currentPage.toString(),
@@ -116,6 +117,7 @@ class AddEditReadingSessionViewModel(
 
 			_uiState.update {
 				it.copy(
+					today = dateTimeProvider.today(),
 					date = session.date,
 					startPage = session.startPage?.toString().orEmpty(),
 					endPage = session.endPage.toString(),
@@ -145,12 +147,11 @@ class AddEditReadingSessionViewModel(
 		}
 	}
 
-	fun onDateChanged(date: String) {
+	fun onDateChanged(date: LocalDate) {
 		try {
-			val dateParsed = LocalDate.parse(date)
 			_uiState.update {
 				it.copy(
-					date = dateParsed,
+					date = date,
 					errorMessage = null
 				)
 			}
