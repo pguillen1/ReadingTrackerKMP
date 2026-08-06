@@ -46,6 +46,8 @@ object ReadingTrackerTestTags {
 		const val SCREEN = "add_edit_session_screen"
 		const val SCREEN_TITLE = "add_edit_session_screen_title"
 		const val BACK_BUTTON = "add_edit_session_back_button"
+		const val DATE_FIELD = "add_edit_session_date_field"
+		const val DATE_DIALOG = "add_edit_session_date_dialog"
 		const val TOTAL_PAGES_FIELD = "add_edit_session_total_pages"
 		const val START_PAGE_FIELD = "add_edit_session_start_page_field"
 		const val END_PAGE_FIELD = "add_edit_session_end_page_field"
