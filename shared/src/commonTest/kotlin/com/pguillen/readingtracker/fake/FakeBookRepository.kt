@@ -5,6 +5,7 @@ import com.pguillen.readingtracker.domain.repository.BookRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlin.collections.map
 
 class FakeBookRepository : BookRepository {
 
@@ -36,5 +37,13 @@ class FakeBookRepository : BookRepository {
 
 	override suspend fun deleteBook(bookId: String) {
 		books.value = books.value.filterNot { it.id == bookId }
+	}
+
+	override suspend fun updateBookCover(bookId: String, coverFileName: String?) {
+		val originalBook = books.value.single { book -> book.id == bookId }
+		val updatedBook = originalBook.copy(coverFileName = coverFileName)
+		books.value = books.value.map { book ->
+			if (book.id == updatedBook.id) updatedBook else book
+		}
 	}
 }
