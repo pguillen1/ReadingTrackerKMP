@@ -56,6 +56,7 @@ import com.pguillen.readingtracker.domain.model.BookNote
 import com.pguillen.readingtracker.domain.model.BookNoteType
 import com.pguillen.readingtracker.domain.model.ReadingSession
 import com.pguillen.readingtracker.domain.model.ReadingStatus
+import com.pguillen.readingtracker.presentation.components.rememberBookCoverPicker
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
@@ -77,6 +78,12 @@ fun BookDetailRoute(
 ) {
 	val uiState by viewModel.uiState.collectAsState()
 
+	val coverPicker = rememberBookCoverPicker(
+		onImageSelected = {
+			viewModel.onCoverChange(it)
+		}
+	)
+
 	LaunchedEffect(viewModel) {
 		viewModel.effects.collect { effect ->
 			when (effect) {
@@ -87,6 +94,7 @@ fun BookDetailRoute(
 
 	BookDetailScreen(
 		uiState = uiState,
+		canChangeCover = coverPicker.isSupported,
 		onNavigateBack = onNavigateBack,
 		onEditBookClick = onEditBookClick,
 		onLogSessionClick = onLogSessionClick,
@@ -95,7 +103,8 @@ fun BookDetailRoute(
 		onSeeAllNotesClick = onSeeAllNotesClick,
 		onDeleteBookClick = viewModel::onDeleteBookClick,
 		onDismissDeleteDialog = viewModel::onDismissDeleteDialog,
-		onConfirmDeleteBook = viewModel::onConfirmDeleteBook
+		onConfirmDeleteBook = viewModel::onConfirmDeleteBook,
+		onChangeCoverClick = { coverPicker.launch() }
 	)
 }
 
@@ -103,6 +112,7 @@ fun BookDetailRoute(
 @Composable
 fun BookDetailScreen(
 	uiState: BookDetailUiState,
+	canChangeCover: Boolean,
 	onNavigateBack: () -> Unit,
 	onEditBookClick: (String) -> Unit,
 	onLogSessionClick: (String) -> Unit,
@@ -111,7 +121,8 @@ fun BookDetailScreen(
 	onSeeAllNotesClick: (String) -> Unit,
 	onDeleteBookClick: () -> Unit,
 	onDismissDeleteDialog: () -> Unit,
-	onConfirmDeleteBook: () -> Unit
+	onConfirmDeleteBook: () -> Unit,
+	onChangeCoverClick: () -> Unit
 ) {
 	Scaffold(
 		containerColor = ReadingTrackerColors.background,

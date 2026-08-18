@@ -3,6 +3,7 @@ package com.pguillen.readingtracker.presentation.bookdetail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pguillen.readingtracker.core.error.DomainException
+import com.pguillen.readingtracker.domain.storage.SelectedImage
 import com.pguillen.readingtracker.domain.usecase.book.DeleteBookUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBookDetailUseCase
 import kotlinx.coroutines.channels.Channel
@@ -100,5 +101,9 @@ class BookDetailViewModel(
 				}
 			}
 		}
+	}
+
+	fun onCoverChange(image: SelectedImage?) {
+
 	}
 }
