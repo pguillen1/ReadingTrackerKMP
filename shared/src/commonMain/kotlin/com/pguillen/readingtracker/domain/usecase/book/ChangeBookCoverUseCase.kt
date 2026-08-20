@@ -3,6 +3,8 @@ package com.pguillen.readingtracker.domain.usecase.book
 import com.pguillen.readingtracker.domain.repository.BookRepository
 import com.pguillen.readingtracker.domain.storage.BookCoverStorage
 import com.pguillen.readingtracker.domain.storage.SelectedImage
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.withContext
 
 class ChangeBookCoverUseCase(
     private val bookRepository: BookRepository,
@@ -11,7 +13,7 @@ class ChangeBookCoverUseCase(
     suspend operator fun invoke(
         bookId: String,
         image: SelectedImage
-    ) {
+    ) = withContext(NonCancellable) {
         val book = bookRepository.getBookById(bookId)
             ?: throw IllegalArgumentException(
                 "Book not found"
@@ -29,14 +31,20 @@ class ChangeBookCoverUseCase(
             )
         } catch (exception: Exception) {
 
-            bookCoverStorage.deleteCover(
-                newCoverFileName
-            )
+            try {
+                bookCoverStorage.deleteCover(newCoverFileName)
+            } catch (_: Exception) {
+
+            }
 
             throw exception
         }
         oldCoverFileName?.let { fileName ->
-            bookCoverStorage.deleteCover(fileName)
+            try {
+                bookCoverStorage.deleteCover(fileName)
+            } catch (_: Exception) {
+
+            }
         }
     }
 }
