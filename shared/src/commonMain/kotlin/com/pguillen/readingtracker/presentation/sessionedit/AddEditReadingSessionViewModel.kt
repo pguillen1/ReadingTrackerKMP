@@ -156,7 +156,7 @@ class AddEditReadingSessionViewModel(
 				)
 			}
 		}
-		catch (exception: Exception) {
+		catch (_: Exception) {
 			_uiState.update {
 				it.copy(
 					errorMessage = "Invalid date"
@@ -227,7 +227,7 @@ class AddEditReadingSessionViewModel(
 						registerReadingSessionUseCase(
 							RegisterReadingSessionParams(
 								bookId = currentBookId,
-								date = state.date ?: dateTimeProvider.today(),
+								date = state.date,
 								startPage = state.startPage.toIntOrNull(),
 								endPage = state.endPage.toIntOrNull() ?: 0,
 								minutes = state.minutes.toIntOrNull(),
@@ -243,7 +243,7 @@ class AddEditReadingSessionViewModel(
 						updateReadingSessionUseCase(
 							UpdateReadingSessionParams(
 								sessionId = currentSessionId,
-								date = state.date ?: dateTimeProvider.today(),
+								date = state.date,
 								startPage = state.startPage.toIntOrNull(),
 								endPage = state.endPage.toIntOrNull() ?: 0,
 								minutes = state.minutes.toIntOrNull(),
@@ -263,7 +263,7 @@ class AddEditReadingSessionViewModel(
 					)
 				}
 			}
-			catch (exception: Exception) {
+			catch (_: Exception) {
 				_uiState.update {
 					it.copy(
 						isSaving = false,

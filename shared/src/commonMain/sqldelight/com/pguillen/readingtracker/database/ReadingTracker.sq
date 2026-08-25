@@ -87,6 +87,11 @@ deleteBook:
 DELETE FROM book
 WHERE id = ?;
 
+updateBookCover:
+UPDATE book
+SET cover_file_name = ?
+WHERE id = ?;
+
 selectAllSessions:
 SELECT *
 FROM reading_session

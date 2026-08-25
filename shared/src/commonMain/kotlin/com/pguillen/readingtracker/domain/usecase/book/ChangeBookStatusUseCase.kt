@@ -22,7 +22,7 @@ class ChangeBookStatusUseCase(
 		val updatedBook = book.copy(
 			status = newStatus,
 			currentPage = when {
-				newStatus == ReadingStatus.FINISHED && book.totalPages != null -> book.totalPages
+				newStatus == ReadingStatus.FINISHED -> book.totalPages
 				else -> book.currentPage
 			},
 			startedAt = when (newStatus) {

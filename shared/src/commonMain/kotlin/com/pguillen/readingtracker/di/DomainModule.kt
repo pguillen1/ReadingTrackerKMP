@@ -1,11 +1,13 @@
 package com.pguillen.readingtracker.di
 
 import com.pguillen.readingtracker.domain.usecase.book.AddBookUseCase
+import com.pguillen.readingtracker.domain.usecase.book.ChangeBookCoverUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ChangeBookStatusUseCase
 import com.pguillen.readingtracker.domain.usecase.book.DeleteBookUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBookByIdUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBookDetailUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBooksUseCase
+import com.pguillen.readingtracker.domain.usecase.book.RemoveBookCoverUseCase
 import com.pguillen.readingtracker.domain.usecase.book.UpdateBookUseCase
 import com.pguillen.readingtracker.domain.usecase.note.AddBookNoteUseCase
 import com.pguillen.readingtracker.domain.usecase.note.DeleteBookNoteUseCase
@@ -52,4 +54,6 @@ val domainModule = module {
 	factory { GetBookNoteByIdUseCase(get()) }
 
 	factory { GetReadingSessionByIdUseCase(get()) }
+	factory { ChangeBookCoverUseCase(get(), get()) }
+	factory { RemoveBookCoverUseCase(get()) }
 }

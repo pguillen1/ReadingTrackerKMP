@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pguillen.readingtracker.core.error.DomainException
 import com.pguillen.readingtracker.domain.storage.SelectedImage
+import com.pguillen.readingtracker.domain.usecase.book.ChangeBookCoverUseCase
 import com.pguillen.readingtracker.domain.usecase.book.DeleteBookUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBookDetailUseCase
+import com.pguillen.readingtracker.domain.usecase.book.RemoveBookCoverUseCase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +19,9 @@ import kotlinx.coroutines.launch
 class BookDetailViewModel(
 	private val bookId: String,
 	observeBookDetailUseCase: ObserveBookDetailUseCase,
-	private val deleteBookUseCase: DeleteBookUseCase
+	private val deleteBookUseCase: DeleteBookUseCase,
+	private val changeBookCoverUseCase: ChangeBookCoverUseCase,
+	private val removeBookCoverUseCase: RemoveBookCoverUseCase
 ) : ViewModel() {
 
 	private val _uiState = MutableStateFlow(BookDetailUiState())
@@ -91,7 +95,7 @@ class BookDetailViewModel(
 					)
 				}
 			}
-			catch (exception: Exception) {
+			catch (_: Exception) {
 				_uiState.update {
 					it.copy(
 						isDeleting = false,
@@ -104,6 +108,15 @@ class BookDetailViewModel(
 	}
 
 	fun onCoverChange(image: SelectedImage?) {
-
+		if (image == null) {
+			viewModelScope.launch {
+				removeBookCoverUseCase(bookId)
+			}
+		}
+		else {
+			viewModelScope.launch {
+				changeBookCoverUseCase(bookId, image)
+			}
+		}
 	}
 }

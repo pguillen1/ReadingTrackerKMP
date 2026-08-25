@@ -81,7 +81,10 @@ class SqlDelightBookRepository(
     }
 
     override suspend fun updateBookCover(bookId: String, coverFileName: String?) {
-        TODO("Not yet implemented")
+        queries.updateBookCover(
+            id = bookId,
+            cover_file_name = coverFileName
+        )
     }
 
     private fun mapBook(

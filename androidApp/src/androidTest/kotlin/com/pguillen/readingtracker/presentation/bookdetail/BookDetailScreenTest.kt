@@ -11,6 +11,7 @@ import com.pguillen.readingtracker.domain.model.BookNoteType
 import com.pguillen.readingtracker.domain.model.ReadingSession
 import com.pguillen.readingtracker.domain.model.ReadingStatus
 import com.pguillen.readingtracker.domain.model.ThemePreference
+import com.pguillen.readingtracker.domain.storage.SelectedImage
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerTheme
 import kotlinx.datetime.LocalDate
@@ -202,7 +203,11 @@ class BookDetailScreenTest {
 		onSeeAllNotesClick: (String) -> Unit = {},
 		onDeleteBookClick: () -> Unit = {},
 		onDismissDeleteDialog: () -> Unit = {},
-		onConfirmDeleteBook: () -> Unit = {}
+		onConfirmDeleteBook: () -> Unit = {},
+		canChangeCover: Boolean = false,
+		onCoverChangeClick: () -> Unit = {},
+		onCoverChange: (SelectedImage?) -> Unit = {},
+		isPhotoPickerOpen: Boolean = false
 	) {
 		composeRule.setContent {
 			ReadingTrackerTheme(themePreference = ThemePreference.LIGHT) {
@@ -216,7 +221,11 @@ class BookDetailScreenTest {
 					onLogSessionClick = onLogSessionClick,
 					onAddNoteClick = onAddNoteClick,
 					onSeeAllSessionsClick = onSeeAllSessionsClick,
-					onSeeAllNotesClick = onSeeAllNotesClick
+					onSeeAllNotesClick = onSeeAllNotesClick,
+					canChangeCover = canChangeCover,
+					isPhotoPickerOpen = isPhotoPickerOpen,
+					onCoverChangeClick = onCoverChangeClick,
+					onCoverChange = onCoverChange
 				)
 			}
 		}

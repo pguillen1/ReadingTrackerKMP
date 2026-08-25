@@ -313,7 +313,6 @@ private fun BookListItem(
 			verticalAlignment = Alignment.CenterVertically
 		) {
 			BookCoverPlaceholder(
-				title = book.title
 			)
 
 			Spacer(modifier = Modifier.padding(horizontal = 6.dp))
@@ -368,9 +367,7 @@ private fun BookListItem(
 }
 
 @Composable
-private fun BookCoverPlaceholder(
-	title: String
-) {
+private fun BookCoverPlaceholder() {
 	Box(
 		modifier = Modifier
 			.height(82.dp)
@@ -480,10 +477,5 @@ private fun EmptyLibraryState() {
 private fun progressText(book: Book): String {
 	val totalPages = book.totalPages
 
-	return if (totalPages != null) {
-		"${book.currentPage} / $totalPages pages"
-	}
-	else {
-		"${book.currentPage} pages"
-	}
+	return "${book.currentPage} / $totalPages pages"
 }

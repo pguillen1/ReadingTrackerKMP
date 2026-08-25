@@ -1,9 +1,12 @@
 package com.pguillen.readingtracker.presentation.bookdetail
 
+import com.pguillen.readingtracker.domain.usecase.book.ChangeBookCoverUseCase
 import com.pguillen.readingtracker.domain.usecase.book.DeleteBookUseCase
 import com.pguillen.readingtracker.domain.usecase.book.ObserveBookDetailUseCase
+import com.pguillen.readingtracker.domain.usecase.book.RemoveBookCoverUseCase
 import com.pguillen.readingtracker.fake.BOOK_ID
 import com.pguillen.readingtracker.fake.BOOK_TITLE
+import com.pguillen.readingtracker.fake.FakeBookCoverStorage
 import com.pguillen.readingtracker.fake.FakeBookNoteRepository
 import com.pguillen.readingtracker.fake.FakeBookRepository
 import com.pguillen.readingtracker.fake.FakeReadingSessionRepository
@@ -39,6 +42,7 @@ class BookDetailViewModelTest {
 	private lateinit var fakeBookRepository: FakeBookRepository
 	private lateinit var fakeReadingSessionRepository: FakeReadingSessionRepository
 	private lateinit var fakeBookNoteRepository: FakeBookNoteRepository
+	private lateinit var fakeBookCoverStorage: FakeBookCoverStorage
 	private lateinit var viewModel: BookDetailViewModel
 
 	@BeforeTest
@@ -185,6 +189,13 @@ class BookDetailViewModelTest {
 				bookNoteRepository = fakeBookNoteRepository
 			),
 			deleteBookUseCase = DeleteBookUseCase(
+				bookRepository = fakeBookRepository
+			),
+			changeBookCoverUseCase = ChangeBookCoverUseCase(
+				bookRepository = fakeBookRepository,
+				bookCoverStorage = fakeBookCoverStorage
+			),
+			removeBookCoverUseCase = RemoveBookCoverUseCase(
 				bookRepository = fakeBookRepository
 			)
 		)

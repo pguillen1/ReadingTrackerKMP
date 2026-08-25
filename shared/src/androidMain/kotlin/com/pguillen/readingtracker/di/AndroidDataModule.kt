@@ -11,6 +11,8 @@ import com.pguillen.readingtracker.domain.repository.BookNoteRepository
 import com.pguillen.readingtracker.domain.repository.BookRepository
 import com.pguillen.readingtracker.domain.repository.ReadingSessionRepository
 import com.pguillen.readingtracker.domain.repository.UserPreferencesRepository
+import com.pguillen.readingtracker.domain.storage.AndroidBookCoverStorage
+import com.pguillen.readingtracker.domain.storage.BookCoverStorage
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -55,5 +57,9 @@ val androidDataModule = module {
 		SqlDelightBookNoteRepository(
 			database = get()
 		)
+	}
+
+	single<BookCoverStorage> {
+		AndroidBookCoverStorage(get())
 	}
 }

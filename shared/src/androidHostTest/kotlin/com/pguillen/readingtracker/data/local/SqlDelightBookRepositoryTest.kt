@@ -97,4 +97,75 @@ class SqlDelightBookRepositoryTest {
 
 		assertNull(savedBook)
 	}
+
+	@Test
+	fun `updateBookCover updates cover file name`() = runTest {
+		val book = createBook(
+			id = BOOK_ID,
+			coverFileName = null,
+		)
+
+		bookRepository.insertBook(book)
+
+		bookRepository.updateBookCover(
+			bookId = book.id,
+			coverFileName = "new_cover.webp",
+		)
+
+		val updatedBook = bookRepository.getBookById(
+			book.id
+		)
+
+		assertEquals(
+			"new_cover.webp",
+			updatedBook?.coverFileName,
+		)
+	}
+
+	@Test
+	fun `updateBookCover with null removes cover file name`() = runTest {
+		val book = createBook(
+			id = BOOK_ID,
+			coverFileName = "old_cover.webp",
+		)
+
+		bookRepository.insertBook(book)
+
+		bookRepository.updateBookCover(
+			bookId = book.id,
+			coverFileName = null,
+		)
+
+		val updatedBook = bookRepository.getBookById(
+			book.id
+		)
+
+		assertNull(
+			updatedBook?.coverFileName
+		)
+	}
+
+	@Test
+	fun `updateBookCover emits updated book`() = runTest {
+		val book = createBook(
+			id = BOOK_ID,
+			coverFileName = null,
+		)
+
+		bookRepository.insertBook(book)
+
+		bookRepository.updateBookCover(
+			bookId = book.id,
+			coverFileName = "new_cover.webp",
+		)
+
+		val updatedBook = bookRepository
+			.observeBookById(book.id)
+			.first()
+
+		assertEquals(
+			"new_cover.webp",
+			updatedBook?.coverFileName,
+		)
+	}
 }

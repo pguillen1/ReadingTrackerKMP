@@ -5,6 +5,7 @@ import com.pguillen.readingtracker.domain.storage.SelectedImage
 
 class BookCoverPicker(
     val isSupported: Boolean,
+    val isOpen: Boolean,
     private val launchAction: () -> Unit,
 ) {
     fun launch() {

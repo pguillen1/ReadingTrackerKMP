@@ -1,6 +1,7 @@
 package com.pguillen.readingtracker.presentation.bookdetail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,12 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Book
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
@@ -27,12 +33,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -44,6 +53,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,8 +68,9 @@ import com.pguillen.readingtracker.domain.model.BookNote
 import com.pguillen.readingtracker.domain.model.BookNoteType
 import com.pguillen.readingtracker.domain.model.ReadingSession
 import com.pguillen.readingtracker.domain.model.ReadingStatus
+import com.pguillen.readingtracker.domain.storage.SelectedImage
+import com.pguillen.readingtracker.presentation.components.CustomBookCover
 import com.pguillen.readingtracker.presentation.components.rememberBookCoverPicker
-import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
@@ -95,6 +108,7 @@ fun BookDetailRoute(
 	BookDetailScreen(
 		uiState = uiState,
 		canChangeCover = coverPicker.isSupported,
+		isPhotoPickerOpen = coverPicker.isOpen,
 		onNavigateBack = onNavigateBack,
 		onEditBookClick = onEditBookClick,
 		onLogSessionClick = onLogSessionClick,
@@ -104,7 +118,8 @@ fun BookDetailRoute(
 		onDeleteBookClick = viewModel::onDeleteBookClick,
 		onDismissDeleteDialog = viewModel::onDismissDeleteDialog,
 		onConfirmDeleteBook = viewModel::onConfirmDeleteBook,
-		onChangeCoverClick = { coverPicker.launch() }
+		onCoverChangeClick = { coverPicker.launch() },
+		onCoverChange = viewModel::onCoverChange
 	)
 }
 
@@ -113,6 +128,7 @@ fun BookDetailRoute(
 fun BookDetailScreen(
 	uiState: BookDetailUiState,
 	canChangeCover: Boolean,
+	isPhotoPickerOpen: Boolean,
 	onNavigateBack: () -> Unit,
 	onEditBookClick: (String) -> Unit,
 	onLogSessionClick: (String) -> Unit,
@@ -122,7 +138,8 @@ fun BookDetailScreen(
 	onDeleteBookClick: () -> Unit,
 	onDismissDeleteDialog: () -> Unit,
 	onConfirmDeleteBook: () -> Unit,
-	onChangeCoverClick: () -> Unit
+	onCoverChangeClick: () -> Unit,
+	onCoverChange: (SelectedImage?) -> Unit
 ) {
 	Scaffold(
 		containerColor = ReadingTrackerColors.background,
@@ -139,7 +156,8 @@ fun BookDetailScreen(
 				navigationIcon = {
 					IconButton(
 						modifier = Modifier.testTag(BookDetail.BACK_BUTTON),
-						onClick = onNavigateBack) {
+						onClick = onNavigateBack
+					) {
 						Icon(
 							imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
 							contentDescription = "Back",
@@ -215,13 +233,18 @@ fun BookDetailScreen(
 			else -> {
 				BookDetailContent(
 					book = uiState.book,
+					isUpdatingCover = uiState.isUpdatingCover,
+					canChangeCover = canChangeCover,
+					isPhotoPickerOpen = isPhotoPickerOpen,
 					recentSessions = uiState.recentSessions,
 					recentNotes = uiState.recentNotes,
 					onLogSessionClick = onLogSessionClick,
 					onAddNoteClick = onAddNoteClick,
 					modifier = Modifier.padding(innerPadding),
 					onSeeAllSessionsClick = onSeeAllSessionsClick,
-					onSeeAllNotesClick = onSeeAllNotesClick
+					onSeeAllNotesClick = onSeeAllNotesClick,
+					onCoverChangeClick = onCoverChangeClick,
+					onCoverChange = onCoverChange
 				)
 			}
 		}
@@ -241,6 +264,9 @@ fun BookDetailScreen(
 @Composable
 private fun BookDetailContent(
 	book: Book,
+	isUpdatingCover: Boolean,
+	canChangeCover: Boolean,
+	isPhotoPickerOpen: Boolean,
 	recentSessions: List<ReadingSession>,
 	recentNotes: List<BookNote>,
 	onLogSessionClick: (String) -> Unit,
@@ -248,6 +274,8 @@ private fun BookDetailContent(
 	modifier: Modifier = Modifier,
 	onSeeAllSessionsClick: (String) -> Unit,
 	onSeeAllNotesClick: (String) -> Unit,
+	onCoverChangeClick: () -> Unit,
+	onCoverChange: (SelectedImage?) -> Unit
 ) {
 	LazyColumn(
 		modifier = modifier
@@ -263,7 +291,14 @@ private fun BookDetailContent(
 		verticalArrangement = Arrangement.spacedBy(18.dp)
 	) {
 		item {
-			BookHeroCard(book = book)
+			BookHeroCard(
+				book = book,
+				isUpdatingCover = isUpdatingCover,
+				isPhotoPickerOpen = isPhotoPickerOpen,
+				canChangeCover = canChangeCover,
+				onCoverChangeClick = onCoverChangeClick,
+				onCoverChange = onCoverChange
+			)
 		}
 
 		item {
@@ -294,8 +329,21 @@ private fun BookDetailContent(
 
 @Composable
 private fun BookHeroCard(
-	book: Book
+	book: Book,
+	isUpdatingCover: Boolean,
+	isPhotoPickerOpen: Boolean,
+	canChangeCover: Boolean,
+	onCoverChangeClick: () -> Unit,
+	onCoverChange: (SelectedImage?) -> Unit
 ) {
+	var showCoverOptions by remember {
+		mutableStateOf(false)
+	}
+
+	var showRemoveConfirmation by remember {
+		mutableStateOf(false)
+	}
+
 	Card(
 		modifier = Modifier.fillMaxWidth().testTag(BookDetail.BOOK_CARD),
 		shape = RoundedCornerShape(28.dp),
@@ -310,7 +358,24 @@ private fun BookHeroCard(
 			Row(
 				verticalAlignment = Alignment.Top
 			) {
-				BookCoverLarge()
+				if (canChangeCover) {
+					BookCoverLarge(
+						coverFileName = book.coverFileName,
+						isUpdatingCover = isUpdatingCover,
+						isPhotoPickerOpen = isPhotoPickerOpen,
+						onClick = {
+							if (book.coverFileName == null) {
+								onCoverChangeClick()
+							}
+							else {
+								showCoverOptions = true
+							}
+						}
+					)
+				}
+				else {
+					BookCoverPlaceHolder()
+				}
 
 				Spacer(modifier = Modifier.width(16.dp))
 
@@ -366,10 +431,79 @@ private fun BookHeroCard(
 			)
 		}
 	}
+	if (showCoverOptions) {
+		BookCoverOptionsBottomSheet(
+			onCoverChange = {
+				showCoverOptions = false
+				onCoverChangeClick()
+			},
+			onRemoveCover = {
+				showCoverOptions = false
+				showRemoveConfirmation = true
+			},
+			onDismiss = {
+				showCoverOptions = false
+			}
+		)
+	}
+	if (showRemoveConfirmation) {
+		RemoveBookCoverDialog(
+			onConfirm = {
+				showRemoveConfirmation = false
+				onCoverChange(null)
+			},
+			onDismiss = { showRemoveConfirmation = false }
+		)
+	}
 }
 
 @Composable
-private fun BookCoverLarge() {
+private fun BookCoverLarge(
+	coverFileName: String?,
+	isUpdatingCover: Boolean,
+	isPhotoPickerOpen: Boolean,
+	onClick: () -> Unit
+) {
+
+	Box(
+		modifier = Modifier
+			.width(86.dp)
+			.height(126.dp)
+			.clip(RoundedCornerShape(18.dp))
+			.background(ReadingTrackerColors.cover)
+			.clickable(enabled = !isUpdatingCover || !isPhotoPickerOpen) { onClick() }
+	) {
+		if (isUpdatingCover) {
+			CircularProgressIndicator(
+				modifier = Modifier.align(Alignment.Center)
+			)
+		}
+		else {
+			if (coverFileName != null) {
+				CustomBookCover(
+					fileName = coverFileName,
+					modifier = Modifier.testTag(BookDetail.BOOK_CARD)
+				)
+			}
+			else {
+				Icon(
+					modifier = Modifier.align(Alignment.Center),
+					imageVector = Icons.Outlined.Book,
+					contentDescription = null,
+					tint = ReadingTrackerColors.primaryGreen
+				)
+			}
+			CoverActionIndicator(
+				hasCover = coverFileName != null,
+				modifier = Modifier
+					.align(Alignment.BottomEnd)
+			)
+		}
+	}
+}
+
+@Composable
+private fun BookCoverPlaceHolder() {
 	Box(
 		modifier = Modifier
 			.width(86.dp)
@@ -379,6 +513,7 @@ private fun BookCoverLarge() {
 		contentAlignment = Alignment.Center
 	) {
 		Icon(
+			modifier = Modifier.align(Alignment.Center),
 			imageVector = Icons.Outlined.Book,
 			contentDescription = null,
 			tint = ReadingTrackerColors.primaryGreen
@@ -741,15 +876,147 @@ private fun DeleteBookDialog(
 	)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BookCoverOptionsBottomSheet(
+	onCoverChange: () -> Unit,
+	onRemoveCover: () -> Unit,
+	onDismiss: () -> Unit,
+) {
+	ModalBottomSheet(
+		onDismissRequest = onDismiss,
+	) {
+		Text(
+			text = "Book cover",
+			style = MaterialTheme.typography.titleLarge,
+			modifier = Modifier.padding(
+				horizontal = 24.dp,
+				vertical = 8.dp,
+			),
+		)
+
+		ListItem(
+			headlineContent = {
+				Text("Change cover")
+			},
+			leadingContent = {
+				Icon(
+					imageVector = Icons.Default.Edit,
+					contentDescription = null,
+				)
+			},
+			modifier = Modifier.clickable(
+				onClick = onCoverChange,
+			),
+		)
+
+		ListItem(
+			headlineContent = {
+				Text(
+					text = "Remove cover",
+					color = MaterialTheme.colorScheme.error,
+				)
+			},
+			leadingContent = {
+				Icon(
+					imageVector = Icons.Default.Delete,
+					contentDescription = null,
+					tint = MaterialTheme.colorScheme.error,
+				)
+			},
+			modifier = Modifier.clickable(
+				onClick = onRemoveCover,
+			),
+		)
+
+		ListItem(
+			headlineContent = {
+				Text("Cancel")
+			},
+			leadingContent = {
+				Icon(
+					imageVector = Icons.Default.Close,
+					contentDescription = null,
+				)
+			},
+			modifier = Modifier.clickable(
+				onClick = onDismiss,
+			),
+		)
+
+		Spacer(
+			modifier = Modifier.height(16.dp),
+		)
+	}
+}
+
+@Composable
+fun RemoveBookCoverDialog(
+	onConfirm: () -> Unit,
+	onDismiss: () -> Unit,
+) {
+	AlertDialog(
+		onDismissRequest = onDismiss,
+		title = {
+			Text("Remove cover?")
+		},
+		text = {
+			Text(
+				"The custom cover will be removed and the default cover will be shown."
+			)
+		},
+		confirmButton = {
+			TextButton(
+				onClick = onConfirm,
+			) {
+				Text(
+					text = "Remove",
+					color = MaterialTheme.colorScheme.error,
+				)
+			}
+		},
+		dismissButton = {
+			TextButton(
+				onClick = onDismiss,
+			) {
+				Text("Cancel")
+			}
+		},
+	)
+}
+
+@Composable
+private fun CoverActionIndicator(
+	hasCover: Boolean,
+	modifier: Modifier = Modifier,
+) {
+	Box(
+		modifier = modifier
+			.size(22.dp)
+			.background(
+				color = MaterialTheme.colorScheme.primary,
+				shape = CircleShape,
+			),
+		contentAlignment = Alignment.Center,
+	) {
+		Icon(
+			imageVector = if (hasCover) {
+				Icons.Default.Edit
+			}
+			else {
+				Icons.Default.Add
+			},
+			contentDescription = null,
+			tint = MaterialTheme.colorScheme.onPrimary,
+			modifier = Modifier.size(18.dp),
+		)
+	}
+}
+
 private fun progressText(book: Book): String {
 	val totalPages = book.totalPages
 
-	return if (totalPages != null) {
-		"${book.currentPage} / $totalPages pages"
-	}
-	else {
-		"${book.currentPage} pages"
-	}
+	return "${book.currentPage} / $totalPages pages"
 }
 
 private fun sessionProgressText(session: ReadingSession): String {

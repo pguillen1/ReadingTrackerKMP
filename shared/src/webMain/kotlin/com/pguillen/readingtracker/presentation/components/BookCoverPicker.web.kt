@@ -7,6 +7,7 @@ import com.pguillen.readingtracker.domain.storage.SelectedImage
 actual fun rememberBookCoverPicker(onImageSelected: (SelectedImage) -> Unit): BookCoverPicker {
     return BookCoverPicker(
         isSupported = false,
+        isOpen = false,
         launchAction = {}
     )
 }
