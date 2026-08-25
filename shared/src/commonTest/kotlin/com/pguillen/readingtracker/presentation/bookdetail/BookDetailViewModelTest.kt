@@ -52,6 +52,7 @@ class BookDetailViewModelTest {
 		fakeBookRepository = FakeBookRepository()
 		fakeReadingSessionRepository = FakeReadingSessionRepository()
 		fakeBookNoteRepository = FakeBookNoteRepository()
+		fakeBookCoverStorage = FakeBookCoverStorage()
 	}
 
 	@AfterTest
