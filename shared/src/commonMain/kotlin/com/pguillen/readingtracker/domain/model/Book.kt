@@ -13,7 +13,8 @@ data class Book(
     val startedAt: LocalDate?,
     val finishedAt: LocalDate?,
     val addedAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
+    val coverFileName: String? = null
 ) {
     val progressPercentage: Float
         get() {

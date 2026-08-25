@@ -9,6 +9,8 @@ import com.pguillen.readingtracker.domain.repository.BookNoteRepository
 import com.pguillen.readingtracker.domain.repository.BookRepository
 import com.pguillen.readingtracker.domain.repository.ReadingSessionRepository
 import com.pguillen.readingtracker.domain.repository.UserPreferencesRepository
+import com.pguillen.readingtracker.domain.storage.BookCoverStorage
+import com.pguillen.readingtracker.domain.storage.FakeBookCoverStorage
 import org.koin.dsl.module
 
 val fakePreferencesModule = module {
@@ -26,5 +28,9 @@ val fakePreferencesModule = module {
 
 	single<BookNoteRepository> {
 		FakeBookNoteRepository(initialNotes = DemoData.notes)
+	}
+
+	single<BookCoverStorage> {
+		FakeBookCoverStorage()
 	}
 }

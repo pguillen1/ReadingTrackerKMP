@@ -43,6 +43,7 @@ kotlin {
 			implementation(libs.androidx.datastore.core)
 			implementation(libs.sqldelight.android.driver)
 			implementation(libs.sqldelight.coroutines.extensions)
+			implementation(libs.coil.compose)
 		}
 		commonMain.dependencies {
 			implementation(libs.compose.runtime)

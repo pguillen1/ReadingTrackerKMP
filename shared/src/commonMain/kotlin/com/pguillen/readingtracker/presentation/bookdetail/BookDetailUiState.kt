@@ -11,14 +11,6 @@ data class BookDetailUiState(
 	val isLoading: Boolean = true,
 	val isDeleting: Boolean = false,
 	val showDeleteDialog: Boolean = false,
-	val errorMessage: String? = null
-) {
-	val hasBook: Boolean
-		get() = book != null
-
-	val isEmptySessions: Boolean
-		get() = recentSessions.isEmpty()
-
-	val isEmptyNotes: Boolean
-		get() = recentNotes.isEmpty()
-}
+	val errorMessage: String? = null,
+	val isUpdatingCover: Boolean = false
+)

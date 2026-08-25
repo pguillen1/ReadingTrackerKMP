@@ -41,4 +41,12 @@ class FakeBookRepository(
 			book.id == bookId
 		}
 	}
+
+	override suspend fun updateBookCover(bookId: String, coverFileName: String?) {
+		val originalBook = booksFlow.value.single { book -> book.id == bookId }
+		val updatedBook = originalBook.copy(coverFileName = coverFileName)
+		booksFlow.value = booksFlow.value.map { book ->
+			if (book.id == updatedBook.id) updatedBook else book
+		}
+	}
 }

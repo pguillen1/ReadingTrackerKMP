@@ -18,7 +18,8 @@ fun createBook(
 	startedAt: LocalDate = LocalDate(2026, 1, 1),
 	finishedAt: LocalDate? = null,
 	addedAt: LocalDateTime = LocalDateTime(2026, 1, 1, 10, 0),
-	updatedAt: LocalDateTime = LocalDateTime(2026, 1, 1, 10, 0)
+	updatedAt: LocalDateTime = LocalDateTime(2026, 1, 1, 10, 0),
+	coverFileName: String? = null
 ): Book {
 	return Book(
 		id = id,
@@ -30,7 +31,8 @@ fun createBook(
 		startedAt = startedAt,
 		finishedAt = finishedAt,
 		addedAt = addedAt,
-		updatedAt = updatedAt
+		updatedAt = updatedAt,
+		coverFileName = coverFileName
 	)
 }
 

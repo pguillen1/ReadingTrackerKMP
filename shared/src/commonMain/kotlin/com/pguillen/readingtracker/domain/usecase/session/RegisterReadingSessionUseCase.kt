@@ -51,7 +51,7 @@ class RegisterReadingSessionUseCase(
 		val today = dateTimeProvider.today()
 
 		val newStatus = when {
-			book.totalPages != null && params.endPage == book.totalPages -> ReadingStatus.FINISHED
+			params.endPage == book.totalPages -> ReadingStatus.FINISHED
 			book.status == ReadingStatus.WANT_TO_READ -> ReadingStatus.READING
 			else -> book.status
 		}

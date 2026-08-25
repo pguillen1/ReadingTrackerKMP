@@ -16,4 +16,5 @@ interface BookRepository {
 	suspend fun updateBook(book: Book)
 
 	suspend fun deleteBook(bookId: String)
+	suspend fun updateBookCover(bookId: String, coverFileName: String?)
 }

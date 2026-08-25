@@ -5,10 +5,16 @@ import com.pguillen.readingtracker.domain.repository.BookRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+import kotlin.collections.map
 
 class FakeBookRepository : BookRepository {
 
 	val books = MutableStateFlow(emptyList<Book>())
+	val coverUpdates =
+		mutableListOf<Pair<String, String?>>()
+
+	var updateCoverShouldFail = false
 
 	override fun observeBooks(): Flow<List<Book>> {
 		return books
@@ -36,5 +42,25 @@ class FakeBookRepository : BookRepository {
 
 	override suspend fun deleteBook(bookId: String) {
 		books.value = books.value.filterNot { it.id == bookId }
+	}
+
+	override suspend fun updateBookCover(bookId: String, coverFileName: String?) {
+		if (updateCoverShouldFail) {
+			throw IllegalStateException(
+				"Database update failed"
+			)
+		}
+		books.update { currentBooks ->
+			currentBooks.map { book ->
+				if (book.id == bookId) {
+					coverUpdates.add(bookId to coverFileName)
+					book.copy(
+						coverFileName = coverFileName,
+					)
+				} else {
+					book
+				}
+			}
+		}
 	}
 }
