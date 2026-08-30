@@ -1,0 +1,45 @@
+appId: com.pguillen.readingtracker
+---
+- launchApp:
+    clearState: true
+- tapOn: "Add book"
+- tapOn: "Title"
+- inputText: "Harry Potter"
+- tapOn: "Author"
+- inputText: "J.K.Rowling"
+- tapOn: "Total pages"
+- inputText: "300"
+- hideKeyboard
+- tapOn: "Save book"
+- assertVisible:
+    id: "library_book_card"
+    index: 0
+    containsDescendants:
+      - text: "Harry Potter"
+      - text: 'J\.K\.Rowling'
+- tapOn:
+    id: "library_book_card"
+- tapOn: "Edit book"
+- tapOn: 
+    id: "add_edit_book_title_field"
+    point: 95%,50%
+- eraseText
+- inputText: "Sherlock Holmes"
+- tapOn: 
+    id: "add_edit_book_author_field"
+    point: 95%,50%
+- eraseText
+- inputText: "Arthur Conan Doyle"
+- tapOn: 
+    id: "add_edit_book_total_pages_field"
+    point: 95%,50%
+- eraseText
+- inputText: "150"
+- hideKeyboard
+- tapOn:
+    id: "add_edit_book_save_button"
+- assertVisible:
+    id: "book_detail_book_card"
+    containsDescendants:
+      - text: "Sherlock Holmes"
+      - text: "Arthur Conan Doyle"

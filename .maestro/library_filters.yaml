@@ -1,0 +1,140 @@
+appId: com.pguillen.readingtracker
+---
+- launchApp:
+    clearState: true
+- tapOn: 
+    id: "library_add_book_fab"
+- tapOn: 
+    id: "add_edit_book_title_field"
+- inputText: "Harry Potter"
+- tapOn: 
+    id: "add_edit_book_author_field"
+- inputText: "J.K.Rowling"
+- tapOn: 
+    id: "add_edit_book_total_pages_field"
+- inputText: "300"
+- hideKeyboard
+- tapOn: 
+    id: "add_edit_book_save_button"
+- assertVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Harry Potter"
+      - text: 'J\.K\.Rowling'
+      - text: ".*300.*"
+      - text: "Want to read"
+- tapOn: 
+    id: "library_add_book_fab"
+- tapOn: 
+    id: "add_edit_book_title_field"
+- inputText: "Don Quijote"
+- tapOn: 
+    id: "add_edit_book_author_field"
+- inputText: "Miguel de Cervantes"
+- tapOn: 
+    id: "add_edit_book_total_pages_field"
+- inputText: "500"
+- hideKeyboard
+- tapOn:
+    id: "add_edit_book_status_reading"
+- tapOn: 
+    id: "add_edit_book_save_button"
+- assertVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Don Quijote"
+      - text: "Miguel de Cervantes"
+      - text: ".*500.*"
+      - text: "Reading"
+- tapOn: 
+    id: "library_add_book_fab"
+- tapOn: 
+    id: "add_edit_book_title_field"
+- inputText: "Orgullo y Prejuicio"
+- tapOn: 
+    id: "add_edit_book_author_field"
+- inputText: "Jane Austen"
+- tapOn: 
+    id: "add_edit_book_total_pages_field"
+- inputText: "400"
+- hideKeyboard
+- tapOn:
+    id: "add_edit_book_status_finished"
+- tapOn: 
+    id: "add_edit_book_save_button"
+- assertVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Orgullo y Prejuicio"
+      - text: "Jane Austen"
+      - text: ".*400.*"
+      - text: "Finished"
+- tapOn:
+    id: "library_filter_want_to_read"
+- assertVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Harry Potter"
+      - text: 'J\.K\.Rowling'
+      - text: ".*300.*"
+      - text: "Want to read"
+- assertNotVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Don Quijote"
+      - text: "Miguel de Cervantes"
+      - text: ".*500.*"
+      - text: "Reading"
+- assertNotVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Orgullo y Prejuicio"
+      - text: "Jane Austen"
+      - text: ".*400.*"
+      - text: "Finished"
+- tapOn:
+    id: "library_filter_reading"
+- assertVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Don Quijote"
+      - text: "Miguel de Cervantes"
+      - text: ".*500.*"
+      - text: "Reading"
+- assertNotVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Harry Potter"
+      - text: 'J\.K\.Rowling'
+      - text: ".*300.*"
+      - text: "Want to read"
+- assertNotVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Orgullo y Prejuicio"
+      - text: "Jane Austen"
+      - text: ".*400.*"
+      - text: "Finished"
+- tapOn:
+    id: "library_filter_finished"
+- assertVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Orgullo y Prejuicio"
+      - text: "Jane Austen"
+      - text: ".*400.*"
+      - text: "Finished"
+- assertNotVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Harry Potter"
+      - text: 'J\.K\.Rowling'
+      - text: ".*300.*"
+      - text: "Want to read"
+- assertNotVisible:
+    id: "library_book_card"
+    containsDescendants:
+      - text: "Don Quijote"
+      - text: "Miguel de Cervantes"
+      - text: ".*500.*"
+      - text: "Reading"
