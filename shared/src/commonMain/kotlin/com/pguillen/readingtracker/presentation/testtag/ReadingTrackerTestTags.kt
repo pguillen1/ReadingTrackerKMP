@@ -1,6 +1,11 @@
 package com.pguillen.readingtracker.presentation.testtag
 
 object ReadingTrackerTestTags {
+	object NavigationBar {
+		const val LIBRARY = "navigation_bar_library"
+		const val STATS = "navigation_bar_stats"
+		const val SETTINGS = "navigation_bar_settings"
+	}
 	object Library {
 		const val SCREEN = "library_screen"
 		const val SCREEN_TITLE = "library_screen_title"
@@ -11,8 +16,9 @@ object ReadingTrackerTestTags {
 		const val FILTER_WANT_TO_READ = "library_filter_want_to_read"
 		const val NO_BOOKS_FOUND = "library_no_books_found"
 		const val LOADING_TEXT = "library_loading_text"
+		const val BOOK_CARD = "library_book_card"
 
-		fun bookCard(bookId: String): String = "library_book_card_$bookId"
+//		fun bookCard(bookId: String): String = "library_book_card_$bookId"
 	}
 
 	object AddEditBook {
@@ -40,6 +46,8 @@ object ReadingTrackerTestTags {
 		const val ADD_NOTE_BUTTON = "book_detail_add_note_button"
 		const val RECENT_SESSIONS_CARD = "book_detail_recent_sessions_card"
 		const val RECENT_NOTES_CARD = "book_detail_recent_notes_card"
+		const val SESSION_ROW = "book_detail_session_row"
+		const val NOTE_ROW = "book_detail_note_row"
 	}
 
 	object AddEditSession {
@@ -75,8 +83,9 @@ object ReadingTrackerTestTags {
 		const val EMPTY_SCREEN = "book_sessions_empty_screen"
 		const val SESSIONS_LIST = "book_sessions_sessions_list"
 		const val ADD_BUTTON = "book_sessions_add_button"
+		const val SESSION_CARD = "book_sessions_session_card"
 
-		fun sessionCard(sessionId: String): String = "book_sessions_session_card_$sessionId"
+//		fun sessionCard(sessionId: String): String = "book_sessions_session_card_$sessionId"
 	}
 
 	object BookNotes {

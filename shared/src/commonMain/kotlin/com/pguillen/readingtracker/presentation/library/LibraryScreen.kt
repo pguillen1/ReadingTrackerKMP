@@ -299,7 +299,7 @@ private fun BookListItem(
 	Card(
 		onClick = onClick,
 		modifier = Modifier.fillMaxWidth()
-			.testTag(Library.bookCard(book.id)),
+			.testTag(Library.BOOK_CARD),
 		shape = RoundedCornerShape(22.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card

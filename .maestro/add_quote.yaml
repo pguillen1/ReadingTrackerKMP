@@ -1,0 +1,48 @@
+appId: com.pguillen.readingtracker
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: "library_add_book_fab"
+- tapOn:
+    id: "add_edit_book_title_field"
+- inputText: "Harry Potter"
+- tapOn:
+    id: "add_edit_book_author_field"
+- inputText: "J.K.Rowling"
+- tapOn:
+    id: "add_edit_book_total_pages_field"
+- inputText: "300"
+- hideKeyboard
+- tapOn:
+    id: "add_edit_book_save_button"
+- assertVisible:
+    id: "library_book_card"
+    index: 0
+    containsDescendants:
+      - text: "Harry Potter"
+      - text: 'J\.K\.Rowling'
+      - text: ".*300.*"
+- tapOn:
+    id: "library_book_card"
+    index: 0
+- tapOn:
+    id: "book_detail_add_note_button"
+- tapOn:
+    id: "add_edit_note_type_quote"
+- tapOn:
+    id: "add_edit_note_content_field"
+- inputText: "New quote"
+- hideKeyboard
+- tapOn:
+    id: "add_edit_note_page_field"
+- inputText: "22"
+- hideKeyboard
+- tapOn:
+    id: "add_edit_note_save_button"
+- assertVisible:
+    id: "book_detail_note_row"
+    containsDescendants: 
+        - text: "Quote"
+        - text: "New quote"
+        - text: "Page 22"
