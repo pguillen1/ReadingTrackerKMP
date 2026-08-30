@@ -236,7 +236,7 @@ private fun SessionCard(
 		modifier = Modifier
 			.fillMaxWidth()
 			.clickable(onClick = onClick)
-			.testTag(BookSessions.sessionCard(session.id)),
+			.testTag(BookSessions.SESSION_CARD),
 		shape = RoundedCornerShape(24.dp),
 		colors = CardDefaults.cardColors(
 			containerColor = ReadingTrackerColors.card

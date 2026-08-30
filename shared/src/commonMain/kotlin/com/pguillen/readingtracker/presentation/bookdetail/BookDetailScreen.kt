@@ -647,7 +647,8 @@ private fun SessionRow(
 	session: ReadingSession
 ) {
 	Row(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier.fillMaxWidth()
+			.testTag(BookDetail.SESSION_ROW),
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		Column(
@@ -761,6 +762,7 @@ private fun NoteRow(
 ) {
 	Column(
 		modifier = Modifier.fillMaxWidth()
+			.testTag(BookDetail.NOTE_ROW)
 	) {
 		FilterChip(
 			selected = false,
