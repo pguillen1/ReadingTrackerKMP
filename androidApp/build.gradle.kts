@@ -30,8 +30,8 @@ dependencies {
     implementation(projects.shared)
 
     implementation(libs.androidx.activity.compose)
-
     implementation(libs.compose.uiToolingPreview)
+    implementation(libs.androidx.compose.foundation.layout)
     androidTestImplementation(libs.kotlin.test)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.testExt.junit)
