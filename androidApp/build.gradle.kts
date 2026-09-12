@@ -32,6 +32,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.uiToolingPreview)
     implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.kotlinx.datetime)
+    implementation(libs.koin.android)
     androidTestImplementation(libs.kotlin.test)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.testExt.junit)

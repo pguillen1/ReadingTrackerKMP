@@ -2,40 +2,10 @@ appId: com.pguillen.readingtracker
 ---
 - launchApp:
     clearState: true
-- tapOn:
-    id: "library_add_book_fab"
-- tapOn:
-    id: "add_edit_book_title_field"
-- inputText: "Harry Potter"
-- tapOn:
-    id: "add_edit_book_author_field"
-- inputText: "J.K.Rowling"
-- tapOn:
-    id: "add_edit_book_total_pages_field"
-- inputText: "300"
-- hideKeyboard
-- tapOn:
-    id: "add_edit_book_save_button"
-- assertVisible:
-    id: "library_book_card"
-    index: 0
-    containsDescendants:
-      - text: "Harry Potter"
-      - text: 'J\.K\.Rowling'
-      - text: ".*300.*"
+- openLink:
+    link:  readingtracker://debug/seed/single-book-with-session
 - tapOn:
     id: "library_book_card"
-    index: 0
-- tapOn:
-    id: "book_detail_add_session_button"
-- tapOn:
-    id: "add_edit_session_end_page_field"
-- inputText: "20"
-- hideKeyboard
-- tapOn:
-    id: "add_edit_session_save_button"
-- assertVisible:
-    id: "book_detail_session_row"
 - tapOn: 
     text: "See all"
     index: 0
@@ -62,6 +32,7 @@ appId: com.pguillen.readingtracker
 - inputText: "30"
 - tapOn:
     id: "add_edit_session_note_field"
+- eraseText
 - inputText: "Edited session note"
 - hideKeyboard
 - tapOn:
