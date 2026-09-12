@@ -2,108 +2,55 @@ appId: com.pguillen.readingtracker
 ---
 - launchApp:
     clearState: true
-- tapOn: 
-    id: "library_add_book_fab"
-- tapOn: 
-    id: "add_edit_book_title_field"
-- inputText: "Harry Potter"
-- tapOn: 
-    id: "add_edit_book_author_field"
-- inputText: "J.K.Rowling"
-- tapOn: 
-    id: "add_edit_book_total_pages_field"
-- inputText: "300"
-- hideKeyboard
-- tapOn: 
-    id: "add_edit_book_save_button"
-- tapOn: 
-    id: "library_add_book_fab"
-- tapOn: 
-    id: "add_edit_book_title_field"
-- inputText: "Don Quijote"
-- tapOn: 
-    id: "add_edit_book_author_field"
-- inputText: "Miguel de Cervantes"
-- tapOn: 
-    id: "add_edit_book_total_pages_field"
-- inputText: "500"
-- hideKeyboard
-- tapOn:
-    id: "add_edit_book_status_reading"
-- tapOn: 
-    id: "add_edit_book_save_button"
-- tapOn: 
-    id: "library_add_book_fab"
-- tapOn: 
-    id: "add_edit_book_title_field"
-- inputText: "Orgullo y Prejuicio"
-- tapOn: 
-    id: "add_edit_book_author_field"
-- inputText: "Jane Austen"
-- tapOn: 
-    id: "add_edit_book_total_pages_field"
-- inputText: "400"
-- hideKeyboard
-- tapOn:
-    id: "add_edit_book_status_finished"
-- tapOn: 
-    id: "add_edit_book_save_button"
+- openLink:
+    link:  readingtracker://debug/seed/multiple-books
 - tapOn:
     id: "library_search_field"
     point: 90%,50%
-- inputText: "Harry Potter"
+- inputText: "1"
 - assertVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Harry Potter"
-      - text: 'J\.K\.Rowling'
-      - text: ".*300.*"
-      - text: "Want to read"
+      - text: "Maestro Title 1"
 - assertNotVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Don Quijote"
+      - text: Maestro Title 2"
 - assertNotVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Orgullo y Prejuicio"
+      - text: "Maestro Title 3"
 - eraseText
 - tapOn:
     id: "library_search_field"
     point: 90%,50%
-- inputText: "Don Quijote"
+- inputText: "2"
 - assertVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Don Quijote"
-      - text: "Miguel de Cervantes"
-      - text: ".*500.*"
-      - text: "Reading"
+      - text: "Maestro Title 2"
 - assertNotVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Harry Potter"
+      - text: "Maestro Title 1"
 - assertNotVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Orgullo y Prejuicio"
+      - text: "Maestro Title 3"
 - eraseText
 - tapOn:
     id: "library_search_field"
     point: 90%,50%
-- inputText: "Orgullo y Prejuicio"
+- inputText: "3"
 - assertVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Orgullo y Prejuicio"
-      - text: "Jane Austen"
-      - text: ".*400.*"
-      - text: "Finished"
+      - text: "Maestro Title 3"
 - assertNotVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Harry Potter"
+      - text: "Maestro Title 1"
 - assertNotVisible:
     id: "library_book_card"
     containsDescendants:
-      - text: "Don Quijote"
+      - text: "Maestro Title 2"

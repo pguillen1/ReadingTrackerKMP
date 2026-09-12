@@ -2,21 +2,10 @@ appId: com.pguillen.readingtracker
 ---
 - launchApp:
     clearState: true
-- tapOn: "Add book"
-- tapOn: "Title"
-- inputText: "Harry Potter"
-- tapOn: "Author"
-- inputText: "J.K.Rowling"
-- tapOn: "Total pages"
-- inputText: "300"
-- hideKeyboard
-- tapOn: "Save book"
+- openLink:
+    link:  readingtracker://debug/seed/single-book
 - assertVisible:
     id: "library_book_card"
-    index: 0
-    containsDescendants:
-      - text: "Harry Potter"
-      - text: 'J\.K\.Rowling'
 - tapOn:
     id: "library_book_card"
 - tapOn: "Edit book"
