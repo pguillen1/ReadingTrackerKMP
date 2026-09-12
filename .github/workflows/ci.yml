@@ -90,11 +90,14 @@ jobs:
       - name: Inspect Maestro artifacts
         if: always()
         run: |
-          echo "DEBUG"
-          find maestro-debug -type f -print 2>/dev/null || true
+          echo "=== Custom debug ==="
+          find "$RUNNER_TEMP/maestro-debug" -type f -print 2>/dev/null || true
 
-          echo "TEST OUTPUT"
-          find maestro-output -type f -print 2>/dev/null || true
+          echo "=== Custom test output ==="
+          find "$RUNNER_TEMP/maestro-output" -type f -print 2>/dev/null || true
+
+          echo "=== Maestro default output ==="
+          find "$HOME/.maestro/tests" -type f -print 2>/dev/null || true
 
       - name: Upload Maestro artifacts
         if: always()
@@ -102,6 +105,7 @@ jobs:
         with:
           name: maestro-results
           path: |
-            maestro-debug
-            maestro-output
+            ${{ runner.temp }}/maestro-debug
+            ${{ runner.temp }}/maestro-output
+            ~/.maestro/tests
           if-no-files-found: error
