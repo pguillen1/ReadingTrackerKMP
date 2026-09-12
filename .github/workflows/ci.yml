@@ -83,13 +83,24 @@ jobs:
           disable-animations: true
           script: |
             adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
-            
+            adb logcat -c
+            adb logcat -v time > "$GITHUB_WORKSPACE/android-logcat.txt" &
+            LOGCAT_PID=$!
+
+            set +e
             maestro --verbose test .maestro
+            MAESTRO_EXIT=$?
+
+            kill $LOGCAT_PID || true
+
+            exit $MAESTRO_EXIT
 
       - name: Upload Maestro artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: maestro-results
-          path: ~/.maestro/tests
+          path: |
+            ~/.maestro/tests
+            android-logcat.txt
           if-no-files-found: error
