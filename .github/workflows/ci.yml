@@ -84,9 +84,7 @@ jobs:
           script: |
             adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
             
-            maestro --verbose test .maestro \
-              --debug-output "$GITHUB_WORKSPACE/maestro-debug" \
-              --test-output-dir ../maestro-output
+            maestro --verbose test .maestro --debug-output "$GITHUB_WORKSPACE/maestro-debug" --test-output-dir ../maestro-output
       - name: Inspect Maestro artifacts
         if: always()
         run: |
