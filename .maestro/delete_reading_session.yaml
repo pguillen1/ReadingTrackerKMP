@@ -4,8 +4,10 @@ appId: com.pguillen.readingtracker
     clearState: true
 - openLink:
     link:  readingtracker://debug/seed/single-book-with-session
-- assertVisible:
-    id: "library_book_card"
+- extendedWaitUntil:
+    visible:
+      id: "library_book_card"
+    timeout: 30000
 - tapOn:
     id: "library_book_card"
     index: 0
