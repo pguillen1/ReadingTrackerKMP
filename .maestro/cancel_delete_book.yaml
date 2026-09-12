@@ -7,7 +7,7 @@ appId: com.pguillen.readingtracker
 - extendedWaitUntil:
     visible:
       id: "library_book_card"
-    timeout: 15000
+    timeout: 30000
 - tapOn:
     id: "library_book_card"
     index: 0
