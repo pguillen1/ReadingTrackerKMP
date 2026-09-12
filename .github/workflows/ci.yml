@@ -83,13 +83,25 @@ jobs:
           disable-animations: true
           script: |
             adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
-            maestro --verbose test .maestro --debug-output .maestro-debug --test-output-dir .maestro-output
+            
+            maestro --verbose test .maestro \
+              --debug-output "$GITHUB_WORKSPACE/maestro-debug" \
+              --test-output-dir ../maestro-output
+      - name: Inspect Maestro artifacts
+        if: always()
+        run: |
+          echo "DEBUG"
+          find maestro-debug -type f -print 2>/dev/null || true
+
+          echo "TEST OUTPUT"
+          find maestro-output -type f -print 2>/dev/null || true
+
       - name: Upload Maestro artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: maestro-results
           path: |
-            .maestro-debug
-            .maestro-output
+            maestro-debug
+            maestro-output
           if-no-files-found: error
