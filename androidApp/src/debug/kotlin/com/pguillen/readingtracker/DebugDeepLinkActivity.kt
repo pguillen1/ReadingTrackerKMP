@@ -1,5 +1,6 @@
 package com.pguillen.readingtracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
@@ -42,6 +43,16 @@ class DebugDeepLinkActivity : ComponentActivity() {
 					debugSeeder.seedMultipleBooks()
 				}
 			}
+			val mainIntent = Intent(
+				this@DebugDeepLinkActivity,
+				MainActivity::class.java
+			).apply {
+				flags =
+					Intent.FLAG_ACTIVITY_CLEAR_TOP or
+							Intent.FLAG_ACTIVITY_SINGLE_TOP
+			}
+
+			startActivity(mainIntent)
 			finish()
 		}
 	}
