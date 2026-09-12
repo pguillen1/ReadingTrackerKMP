@@ -92,3 +92,4 @@ jobs:
           path: |
             .maestro-debug
             .maestro-output
+          if-no-files-found: error
