@@ -83,9 +83,7 @@ jobs:
           disable-animations: true
           script: |
             adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
-            maestro --verbose test .maestro \
-              --debug-output .maestro-debug \
-              --test-output-dir .maestro-output
+            maestro --verbose test .maestro --debug-output .maestro-debug --test-output-dir .maestro-output
       - name: Upload Maestro artifacts
         if: always()
         uses: actions/upload-artifact@v4
