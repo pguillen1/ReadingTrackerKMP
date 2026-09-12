@@ -84,26 +84,12 @@ jobs:
           script: |
             adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
             
-            maestro --verbose test .maestro --debug-output "$GITHUB_WORKSPACE/maestro-debug" --test-output-dir ../maestro-output
-      - name: Inspect Maestro artifacts
-        if: always()
-        run: |
-          echo "=== Custom debug ==="
-          find "$RUNNER_TEMP/maestro-debug" -type f -print 2>/dev/null || true
-
-          echo "=== Custom test output ==="
-          find "$RUNNER_TEMP/maestro-output" -type f -print 2>/dev/null || true
-
-          echo "=== Maestro default output ==="
-          find "$HOME/.maestro/tests" -type f -print 2>/dev/null || true
+            maestro --verbose test .maestro
 
       - name: Upload Maestro artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: maestro-results
-          path: |
-            ${{ runner.temp }}/maestro-debug
-            ${{ runner.temp }}/maestro-output
-            ~/.maestro/tests
+          path: ~/.maestro/tests
           if-no-files-found: error
