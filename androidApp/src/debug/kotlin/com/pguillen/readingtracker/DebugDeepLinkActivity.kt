@@ -1,5 +1,6 @@
 package com.pguillen.readingtracker
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
@@ -18,8 +19,7 @@ class DebugDeepLinkActivity : ComponentActivity() {
 	val debugSeeder by lazy {
 		DebugSeeder(
 			bookRepository,
-			sessionRepository,
-			noteRepository
+			sessionRepository
 		)
 	}
 
@@ -32,6 +32,9 @@ class DebugDeepLinkActivity : ComponentActivity() {
 
 		lifecycleScope.launch {
 			when (uri?.path) {
+				"/seed/empty" -> {
+					debugSeeder.empty()
+				}
 				"/seed/single-book" -> {
 					debugSeeder.seedSingleBook()
 				}
@@ -42,7 +45,16 @@ class DebugDeepLinkActivity : ComponentActivity() {
 					debugSeeder.seedMultipleBooks()
 				}
 			}
-			finish()
+			val mainIntent = Intent(
+				this@DebugDeepLinkActivity,
+				MainActivity::class.java
+			).apply {
+				flags =
+					Intent.FLAG_ACTIVITY_CLEAR_TOP or
+							Intent.FLAG_ACTIVITY_SINGLE_TOP
+			}
+
+			startActivity(mainIntent)
 		}
 	}
 }

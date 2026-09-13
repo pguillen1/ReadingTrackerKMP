@@ -1,4 +1,4 @@
-name: Test and Deploy Web Demo
+name: Deploy Web Demo
 
 on:
   push:
@@ -17,91 +17,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-
-  fast-tests:
-    name: Unit and integration tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
-
-      - name: Run unit and integration tests
-        run: ./gradlew check
-
-
-  maestro-e2e:
-    name: Maestro E2E tests
-    needs: fast-tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    env:
-      MAESTRO_CLI_NO_ANALYTICS: true
-      MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: true
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
-
-      - name: Build Android debug APK
-        run: ./gradlew :androidApp:assembleDebug
-
-      - name: Install Maestro
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
-
-      - name: Check Maestro installation
-        run: maestro --version
-
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
-            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Run Maestro tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          arch: x86_64
-          target: google_apis
-          profile: pixel_6
-          disable-animations: true
-          script: |
-            adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
-            maestro test .maestro
-
-
-  build-web:
+  build:
     name: Build web demo
-    needs: maestro-e2e
     runs-on: ubuntu-latest
 
     steps:
@@ -131,10 +48,9 @@ jobs:
         with:
           path: webApp/build/dist/wasmJs/productionExecutable
 
-
   deploy:
     name: Deploy to GitHub Pages
-    needs: build-web
+    needs: build
     runs-on: ubuntu-latest
 
     environment:

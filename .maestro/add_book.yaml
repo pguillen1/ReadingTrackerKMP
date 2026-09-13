@@ -1,8 +1,10 @@
 appId: com.pguillen.readingtracker
 ---
-- launchApp:
-    clearState: true
-- tapOn: "Add book"
+- launchApp
+- openLink:
+    link:  readingtracker://debug/seed/empty
+- tapOn:
+    id: "library_add_book_fab"
 - tapOn: "Title"
 - inputText: "Harry Potter"
 - tapOn: "Author"
