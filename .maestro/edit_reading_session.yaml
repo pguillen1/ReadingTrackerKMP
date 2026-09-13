@@ -1,7 +1,6 @@
 appId: com.pguillen.readingtracker
 ---
-- launchApp:
-    clearState: true
+- launchApp
 - openLink:
     link:  readingtracker://debug/seed/single-book-with-session
 - extendedWaitUntil:

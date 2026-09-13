@@ -5,18 +5,23 @@ import com.pguillen.readingtracker.domain.model.BookNote
 import com.pguillen.readingtracker.domain.model.BookNoteType
 import com.pguillen.readingtracker.domain.model.ReadingSession
 import com.pguillen.readingtracker.domain.model.ReadingStatus
-import com.pguillen.readingtracker.domain.repository.BookNoteRepository
 import com.pguillen.readingtracker.domain.repository.BookRepository
 import com.pguillen.readingtracker.domain.repository.ReadingSessionRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 
 class DebugSeeder(
 	private val bookRepository: BookRepository,
-	private val sessionRepository: ReadingSessionRepository,
-	private val noteRepository: BookNoteRepository
+	private val sessionRepository: ReadingSessionRepository
 ) {
+	suspend fun empty() {
+		reset()
+	}
+
 	suspend fun seedSingleBook() {
+		reset()
+
 		bookRepository.insertBook(
 			createBook(
 				id = "Maestro Book ID"
@@ -25,6 +30,7 @@ class DebugSeeder(
 	}
 
 	suspend fun seedBookWithSession() {
+		reset()
 
 		val book = createBook(
 			id = "Maestro Book ID"
@@ -40,6 +46,8 @@ class DebugSeeder(
 	}
 
 	suspend fun seedMultipleBooks() {
+		reset()
+
 		bookRepository.insertBook(
 			createBook(
 				id = "Maestro Book ID 1",
@@ -61,6 +69,16 @@ class DebugSeeder(
 				status = ReadingStatus.FINISHED
 			)
 		)
+	}
+
+	private suspend fun reset() {
+		val books = bookRepository
+			.observeBooks()
+			.first()
+
+		books.forEach { book ->
+			bookRepository.deleteBook(book.id)
+		}
 	}
 
 	private fun createBook(

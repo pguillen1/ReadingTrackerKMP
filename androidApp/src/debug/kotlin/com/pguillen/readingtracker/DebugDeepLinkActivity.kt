@@ -19,8 +19,7 @@ class DebugDeepLinkActivity : ComponentActivity() {
 	val debugSeeder by lazy {
 		DebugSeeder(
 			bookRepository,
-			sessionRepository,
-			noteRepository
+			sessionRepository
 		)
 	}
 
@@ -33,6 +32,9 @@ class DebugDeepLinkActivity : ComponentActivity() {
 
 		lifecycleScope.launch {
 			when (uri?.path) {
+				"/seed/empty" -> {
+					debugSeeder.empty()
+				}
 				"/seed/single-book" -> {
 					debugSeeder.seedSingleBook()
 				}
@@ -53,7 +55,6 @@ class DebugDeepLinkActivity : ComponentActivity() {
 			}
 
 			startActivity(mainIntent)
-			finish()
 		}
 	}
 }

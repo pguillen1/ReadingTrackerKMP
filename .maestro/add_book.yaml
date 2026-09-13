@@ -1,7 +1,8 @@
 appId: com.pguillen.readingtracker
 ---
-- launchApp:
-    clearState: true
+- launchApp
+- openLink:
+    link:  readingtracker://debug/seed/empty
 - tapOn:
     id: "library_add_book_fab"
 - tapOn: "Title"
