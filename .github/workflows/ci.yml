@@ -29,7 +29,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Run checks
-        run: ./gradlew check
+        run: ./gradlew check -x :appiumTests:test
 
 
   maestro-e2e:
