@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import com.pguillen.readingtracker.domain.model.Book
 import com.pguillen.readingtracker.domain.model.ReadingStatus
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.Library
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.Library.BOOK_STATUS
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.Library.BOOK_TITLE
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -312,8 +314,7 @@ private fun BookListItem(
 				.padding(12.dp),
 			verticalAlignment = Alignment.CenterVertically
 		) {
-			BookCoverPlaceholder(
-			)
+			BookCoverPlaceholder()
 
 			Spacer(modifier = Modifier.padding(horizontal = 6.dp))
 
@@ -327,6 +328,7 @@ private fun BookListItem(
 						modifier = Modifier.weight(1f)
 					) {
 						Text(
+							modifier = Modifier.testTag(BOOK_TITLE),
 							text = book.title,
 							style = MaterialTheme.typography.titleMedium,
 							fontWeight = FontWeight.SemiBold,
@@ -409,6 +411,7 @@ private fun StatusBadge(
 			verticalAlignment = Alignment.CenterVertically
 		) {
 			Text(
+				modifier = Modifier.testTag(BOOK_STATUS),
 				text = text,
 				style = MaterialTheme.typography.labelSmall,
 				color = ReadingTrackerColors.textPrimary

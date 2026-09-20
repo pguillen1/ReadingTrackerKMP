@@ -60,6 +60,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,6 +74,10 @@ import com.pguillen.readingtracker.domain.storage.SelectedImage
 import com.pguillen.readingtracker.presentation.components.CustomBookCover
 import com.pguillen.readingtracker.presentation.components.rememberBookCoverPicker
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail.CANCEL_DELETE_BUTTON
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail.CONFIRM_DELETE_BUTTON
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail.NOTES_SEE_ALL_BUTTON
+import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail.SESSIONS_SEE_ALL_BUTTON
 import com.pguillen.readingtracker.presentation.theme.ReadingTrackerColors
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -617,6 +623,7 @@ private fun RecentSessionsCard(
 			SectionHeader(
 				title = "Recent sessions",
 				actionText = "See all",
+				actionModifier = Modifier.testTag(SESSIONS_SEE_ALL_BUTTON),
 				onActionClick = {
 					onSeeAllClick(bookId)
 				}
@@ -700,6 +707,7 @@ private fun RecentNotesCard(
 			SectionHeader(
 				title = "Recent notes",
 				actionText = "See all",
+				actionModifier = Modifier.testTag(NOTES_SEE_ALL_BUTTON),
 				onActionClick = {
 					onSeeAllClick(bookId)
 				}
@@ -729,6 +737,7 @@ private fun RecentNotesCard(
 private fun SectionHeader(
 	title: String,
 	actionText: String,
+	actionModifier: Modifier,
 	onActionClick: () -> Unit
 ) {
 	Row(
@@ -744,6 +753,7 @@ private fun SectionHeader(
 		)
 
 		TextButton(
+			modifier = actionModifier,
 			onClick = onActionClick,
 			contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
 		) {
@@ -842,6 +852,9 @@ private fun DeleteBookDialog(
 	onConfirm: () -> Unit
 ) {
 	AlertDialog(
+		modifier = Modifier.semantics {
+			testTagsAsResourceId = true
+		},
 		onDismissRequest = {
 			if (!isDeleting) {
 				onDismiss()
@@ -857,6 +870,8 @@ private fun DeleteBookDialog(
 		},
 		confirmButton = {
 			TextButton(
+				modifier = Modifier
+					.testTag(CONFIRM_DELETE_BUTTON),
 				onClick = onConfirm,
 				enabled = !isDeleting
 			) {
@@ -868,6 +883,8 @@ private fun DeleteBookDialog(
 		},
 		dismissButton = {
 			TextButton(
+				modifier = Modifier
+					.testTag(CANCEL_DELETE_BUTTON),
 				onClick = onDismiss,
 				enabled = !isDeleting
 			) {
