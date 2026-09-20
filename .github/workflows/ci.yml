@@ -154,27 +154,7 @@ jobs:
           target: google_apis
           profile: pixel_6
           disable-animations: true
-          script: |
-            adb install -r androidApp/build/outputs/apk/debug/androidApp-debug.apk
-
-            appium > appium.log 2>&1 &
-            APPIUM_PID=$!
-
-            for i in {1..30}; do
-              if curl --silent --fail http://127.0.0.1:4723/status > /dev/null; then
-                break
-              fi
-              sleep 1
-            done
-
-            set +e
-            ./gradlew :appiumTests:test
-            TEST_EXIT=$?
-            set -e
-
-            kill $APPIUM_PID || true
-
-            exit $TEST_EXIT
+          script: bash .github/scripts/run-appium-tests.sh
 
       - name: Upload Appium logs
         if: always()
