@@ -17,6 +17,8 @@ object ReadingTrackerTestTags {
 		const val NO_BOOKS_FOUND = "library_no_books_found"
 		const val LOADING_TEXT = "library_loading_text"
 		const val BOOK_CARD = "library_book_card"
+		const val BOOK_TITLE = "library_book_title"
+		const val BOOK_STATUS = "library_book_status"
 
 //		fun bookCard(bookId: String): String = "library_book_card_$bookId"
 	}
@@ -48,6 +50,10 @@ object ReadingTrackerTestTags {
 		const val RECENT_NOTES_CARD = "book_detail_recent_notes_card"
 		const val SESSION_ROW = "book_detail_session_row"
 		const val NOTE_ROW = "book_detail_note_row"
+		const val CONFIRM_DELETE_BUTTON = "book_detail_confirm_delete_button"
+		const val CANCEL_DELETE_BUTTON = "book_detail_cancel_delete_button"
+		const val SESSIONS_SEE_ALL_BUTTON = "book_detail_sessions_see_all_button"
+		const val NOTES_SEE_ALL_BUTTON = "book_detail_notes_see_all_button"
 	}
 
 	object AddEditSession {
