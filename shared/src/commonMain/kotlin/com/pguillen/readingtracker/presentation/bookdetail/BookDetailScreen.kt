@@ -60,8 +60,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -72,6 +70,7 @@ import com.pguillen.readingtracker.domain.model.ReadingSession
 import com.pguillen.readingtracker.domain.model.ReadingStatus
 import com.pguillen.readingtracker.domain.storage.SelectedImage
 import com.pguillen.readingtracker.presentation.components.CustomBookCover
+import com.pguillen.readingtracker.presentation.components.enableTestTagsAsResourceId
 import com.pguillen.readingtracker.presentation.components.rememberBookCoverPicker
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail
 import com.pguillen.readingtracker.presentation.testtag.ReadingTrackerTestTags.BookDetail.CANCEL_DELETE_BUTTON
@@ -852,9 +851,7 @@ private fun DeleteBookDialog(
 	onConfirm: () -> Unit
 ) {
 	AlertDialog(
-		modifier = Modifier.semantics {
-			testTagsAsResourceId = true
-		},
+		modifier = Modifier.enableTestTagsAsResourceId(),
 		onDismissRequest = {
 			if (!isDeleting) {
 				onDismiss()
